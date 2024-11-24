@@ -1,5 +1,6 @@
 -- <leader> key is set in config/options.lua
--- {desc} is required for which-key plugin keybinds descriptions
+-- <cmd> equals to ":"
+
 local map = vim.keymap
 
 -- Buffers

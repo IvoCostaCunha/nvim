@@ -1,3 +1,4 @@
+-- TODO: Add server options here
 local lsp_servers_to_install = {
   "html",
   "cssls",
@@ -36,11 +37,11 @@ return {
     "neovim/nvim-lspconfig",
     event = "VeryLazy",
 
-    -- nvim-lspconfig takes cmp-nvim-lsp to be able to be used by cmp plugins as source completion
+    -- nvim-lspconfig is dependent on cmp-nvim-lsp being loaded to be able to be used by cmp plugins as source completion.
     dependencies = {"hrsh7th/cmp-nvim-lsp"},
 
     init = function()
-      -- LSP displayed errors and warnings configuration
+      -- LSP diagnostics display configuration.
       vim.diagnostic.config({
         underline = true,
         signs = true,
@@ -49,31 +50,31 @@ return {
         severity_sort = true
       })
 
-      -- Floating LSP error/warn/info/hint tooltip config
+      -- Floating LSP error/warn/info/hint tooltip config.
       vim.api.nvim_create_autocmd("CursorHold", {
         buffer = bufnr,
         callback = function()
           local opts = {
             focusable = false,
-            -- severity = "Error", -- To limit which error types trigger the floating window 
+            -- severity = "Error", -- To limit which diagnostic types trigger the floating window. 
             close_events = {"BufLeave", "CursorMoved", "InsertEnter", "FocusLost"},
             -- source is the source of the error like diagnostics from lspconfig or other
             source = "if_many",
             -- prefix = "",
             -- suffix = "",
-            scope = "line",
+            scope = "line", -- scope is the scope from which the diagnostic is displayed.
             severity_sort = true,
             border = "single",
           }
 
           vim.diagnostic.open_float(opts)
           -- The following code objective is to have a fixed floating window of diagnostic instead of one following the cursor.
-          -- Get window number of diagnostic floating window
+          -- Get window number of diagnostic floating window.
           -- local _,window_id = vim.diagnostic.open_float(opts)
           -- if not(window_id == nil) then
           --   local window_config = vim.api.nvim_win_get_config(window_id)
           --   -- vim.tbl_extends merges multiple tables is "force" mode here.
-          --   -- Merging window_config and a new table here
+          --   -- Merging window_config and a new table here.
           --   window_config = vim.tbl_extend("force", window_config, {
           --     -- With relative set to "win" the window is created "inside" a relative window.
           --     -- In this case nvim.api.get_current_win() that returns the window in which the cursor is placed before creating the diagnostic window.
@@ -94,10 +95,14 @@ return {
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
       local lspconfig = require("lspconfig")
 
+      -- Adding LSP capabilities to nvim-cmp.
       local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
       lsp_capabilities = cmp_nvim_lsp.default_capabilities(lsp_capabilities)
+
+      -- Recovering mason-lspconfig installed servers, not only those that are in lsp_servers_to_install.
       local lsp_servers = require("mason-lspconfig").get_installed_servers()
 
+      -- For each server the setup in run with the override of capabilities property.
       for _,s in pairs(lsp_servers) do
         lspconfig[s].setup({
           capabilities = lsp_capabilities
@@ -125,7 +130,7 @@ return {
       "saadparwaiz1/cmp_luasnip"
     },
 
-    -- Load plugin only on entering insert mode
+    -- Load plugin only on entering insert mode.
     event = "InsertEnter",
 
     config = function()
@@ -134,17 +139,17 @@ return {
 
       cmp.setup({
 
-        -- REQUIRED, I use luasnip but there are other options
+        -- REQUIRED, luasnip is used here but there are other options.
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
           end
         },
 
-        -- cmp autocomplete sources
+        -- REQUIRED, cmp autocomplete sources.
         sources = cmp.config.sources(
           {
-            {name = "nvim_lsp"}, -- keyboard_lenght = x chars to auto complete at x chars
+            {name = "nvim_lsp"}, -- keyboard_lenght => To auto complete at x chars.
             {name = "path"},
             {name = "buffer"},
             {name = "luasnip"}
@@ -154,6 +159,7 @@ return {
           }
         ),
 
+        -- Autocompletion window style choices.
         window = {
           completion = {
             border = "rounded",
@@ -164,7 +170,8 @@ return {
             winhighlight  = "Normal:CmpDocNormal"
           },
         },
-
+        
+        -- To display a prefix or icon before the suggestion indicating its source.
         formating = {
           fields = {"menu", "abbr", "kind"},
           format = function(entry, item)
