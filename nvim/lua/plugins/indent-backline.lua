@@ -4,7 +4,7 @@ return {
   ---@module "ibl"
   ---@type ibl.config
 
-  event = "BufEnter",
+  event = "VeryLazy",
   opts = {
     enabled = true;
     indent = {char = "╎"},

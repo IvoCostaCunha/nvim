@@ -1,21 +1,84 @@
--- TODO: Add server options here
-local lsp_servers_to_install = {
-  "html",
-  "cssls",
-  "quick_lint_js",
-  "ts_ls",
-  "angularls",
-  "clangd",
-  "jdtls",
-  "lua_ls",
-  "pylsp",
-  "bashls",
-  "dockerls",
-  "texlab",
+-- lsp_servers array are LSP servers to be installed.
+-- (Additional servers installed via Mason are added added in.)
+-- name -> Name of the server
+-- settings -> options of the server.
+-- on_init -> (Optional) If an on_init function is needed.
+local lsp_servers = {
+  {name = "lua_ls",
+    -- Enables Neovim diagnostics.
+    on_init = function(client)
+    local path = client.workspace_folders[1].name
+    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+      return
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Most likely LuaJIT in the case of Neovim.
+        version = 'LuaJIT'
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        }
+      }
+    })
+    end,
+    settings = {
+      Lua = {
+        runtime = {
+          version = "LuaJIT"
+        }
+      }
+    }
+  },
+  -- ltex only provides orthographic corrections.
+  {name = "ltex",
+    settings = {
+      ltex = {
+        language = "EN-GB",
+        disabledRules = {
+          ["en-GB"] = {"PROFANITY"}
+        },
+        -- User dictionaries
+        dictionary = {
+          ["en-GB"] = {},
+          ["fr"] = {}
+        },
+        checkFrequency = "edit",
+        sentenceCacheSize = "2500",
+      }
+    }
+  },
+  {name = "bashls", settings = {}},
+  {name = "dockerls", settings = {}},
+  {name = "texlab", settings = {}},
+  {name = "html", settings = {}},
+  {name = "cssls", settings = {}},
+  {name = "quick_lint_js", settings = {}},
+  {name = "ts_ls", settings = {}},
+  {name = "angularls", settings = {}},
+  {name = "clangd", settings = {}},
+  {name = "jdtls", settings = {}},
 }
 
-return {
+-- Reducing to an array with only the names of LSP servers.
+local lsp_servers_to_install = {}
+for key,value in pairs(lsp_servers) do
+  table.insert(lsp_servers_to_install, value.name)
+end
 
+local function is_in_lsp_servers(list, item)
+  local is_in = false
+  for _,i in pairs(list) do
+    if i.name == item then is_in = true end
+  end
+  return is_in
+end
+
+return {
   -- Mason plugins install automaticaly lsp servers in the lsp_servers array.
   {
     "williamboman/mason.nvim",
@@ -36,7 +99,6 @@ return {
   {
     "neovim/nvim-lspconfig",
     event = "VeryLazy",
-
     -- nvim-lspconfig is dependent on cmp-nvim-lsp being loaded to be able to be used by cmp plugins as source completion.
     dependencies = {"hrsh7th/cmp-nvim-lsp"},
 
@@ -52,7 +114,6 @@ return {
 
       -- Floating LSP error/warn/info/hint tooltip config.
       vim.api.nvim_create_autocmd("CursorHold", {
-        buffer = bufnr,
         callback = function()
           local opts = {
             focusable = false,
@@ -100,16 +161,31 @@ return {
       lsp_capabilities = cmp_nvim_lsp.default_capabilities(lsp_capabilities)
 
       -- Recovering mason-lspconfig installed servers, not only those that are in lsp_servers_to_install.
-      local lsp_servers = require("mason-lspconfig").get_installed_servers()
-
-      -- For each server the setup in run with the override of capabilities property.
-      for _,s in pairs(lsp_servers) do
-        lspconfig[s].setup({
-          capabilities = lsp_capabilities
-        })
+      -- Then these are added to lsp_servers without any settings.
+      local mason_installed_lsp_servers = require("mason-lspconfig").get_installed_servers()
+      for _,ms in pairs(mason_installed_lsp_servers) do
+        if not is_in_lsp_servers(lsp_servers, ms) then
+          table.insert(lsp_servers, { name = ms, settings = {} })
+        end
       end
 
-    end,
+      -- For each server the setup in run with the override of capabilities and settings properties. If on_init exists it is also override. 
+      for _,s in pairs(lsp_servers) do
+        if s.on_init ~= nil then
+          lspconfig[s.name].setup({
+            capabilities = lsp_capabilities,
+            settings = s.settings,
+            on_init = s.on_init
+          })
+        else
+          lspconfig[s.name].setup({
+            capabilities = lsp_capabilities,
+            settings = s.settings,
+          })
+        end
+      end
+
+    end
   },
   {
     "hrsh7th/nvim-cmp",
@@ -170,7 +246,7 @@ return {
             winhighlight  = "Normal:CmpDocNormal"
           },
         },
-        
+
         -- To display a prefix or icon before the suggestion indicating its source.
         formating = {
           fields = {"menu", "abbr", "kind"},
@@ -236,7 +312,7 @@ return {
         sources = cmp.config.sources(
         {
             { name = "path" }
-        }, 
+        },
         {
             { name = "cmdline" }
         })

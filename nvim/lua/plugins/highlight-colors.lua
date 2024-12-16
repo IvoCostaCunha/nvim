@@ -1,11 +1,13 @@
 return {
   "brenoprata10/nvim-highlight-colors",
-  event = "BufEnter",
+  event = "VeryLazy",
   opts = {
+    -- render can be "background", "foreground", or "virtual".
     render = "background",
+    virtual_symbol = "●",
     virtual_symbol_prefix = "",
-	  virtual_symbol_suffix = " ",
-	  virtual_symbol_position = "inline",
+	  virtual_symbol_suffix = "",
+	  virtual_symbol_position = "eol",
 	  enable_hex = true,
 	  enable_short_hex = true,
 	  enable_rgb = true,

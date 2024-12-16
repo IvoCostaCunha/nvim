@@ -29,19 +29,36 @@ map.set("n", "<leader>ft", telescope.colorscheme, {desc = "Telescope colorscheme
 map.set("n", "<leader>fp", telescope.search_history, {desc = "Telescope search_history"})
 map.set("n", "<leader>fh", telescope.help_tags, {desc = "Telescope help_tags"})
 
+-- Trouble
+map.set("n", "<leader>x", "", {desc = "Diagnostics list"})
+
+-- LateX (Vimtext)
+map.set("n", "<leader>l", "", {desc = "Latex"})
+map.set("n", "<leader>lt", "<cmd>VimtexTocToggle<cr>", {desc = "Latex toggle"})
+map.set("n", "<leader>lc", "<cmd>VimtexCompile<cr>", {desc = "Latex compile"})
+map.set("n", "<leader>lr", "<cmd>VimtexReload<cr>", {desc = "Latex reload"})
+map.set("n", "<leader>ls", "<cmd>VimtexStop<cr>", {desc = "Latex stop"})
+map.set("n", "<leader>lcc", "<cmd>VimtexClearCache<cr>", {desc = "Latex clear cache"})
+map.set("n", "<leader>lv", "<cmd>VimtexView<cr>", {desc = "Latex view"})
+map.set("n", "<leader>lx", "<cmd>VimtexErrors<cr>", {desc = "Latex errors"})
+map.set("n", "<leader>li", "<cmd>VimtexInfo<cr>", {desc = "Latex info"})
+
 -- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function()
-    map.set("n", "<leader>g", "", {desc = "LSP goto"})
+    map.set("n", "<leader>g", "", {desc = "GoTo"})
     map.set("n", "<leader>k", vim.lsp.buf.hover, {desc = "Cursor doc"})
     map.set("n", "<leader>gD", vim.lsp.buf.definition, {desc = "Go to definition"})
     map.set("n", "<leader>gd", vim.lsp.buf.declaration, {desc = "Go to declaration(s)"})
     map.set("n", "<leader>gi", vim.lsp.buf.implementation, {desc = "Go to implementation"})
     map.set("n", "<leader>gs", vim.lsp.buf.signature_help, {desc = "Signature help"})
+    
     map.set("n", "<leader>R", vim.lsp.buf.rename, {desc = "Rename"})
-    map.set("n", "<leader>df", vim.diagnostic.open_float, {desc = "Diagnostic open float"})
-    map.set("n", "<leader>dh", vim.diagnostic.goto_prev, {desc = "Diagnostic previous"})
-    map.set("n", "<leader>dl", vim.diagnostic.goto_next, {desc = "Diagnostic next"})
+    
+    map.set("n", "<leader>e", "", {desc = "Error diagnostics"})
+    map.set("n", "<leader>ef", vim.diagnostic.open_float, {desc = "Diagnostic open float"})
+    map.set("n", "<leader>eh", vim.diagnostic.goto_prev, {desc = "Diagnostic previous"})
+    map.set("n", "<leader>el", vim.diagnostic.goto_next, {desc = "Diagnostic next"})
   end
 })
 
@@ -49,7 +66,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 -- DAP (Debug) -> In lua/plugins/dap.lua
 -- map.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<cr>", {desc = "Add breakpoint"}) -- set in plugin conf file
-map.set("n", "<leader>d", "", {desc = "DAP"})
+map.set("n", "<leader>d", "", {desc = "Debug"})
 map.set("n", "<leader>dc", "<cmd>DapContinue<cr>", {desc ="Launch debug"})
 map.set("n", "<leader>dn", "<cmd>DapStepOver<cr>", {desc = "Next step"})
 map.set("n", "<leader>dp", "<cmd>DapStepInto<cr>", {desc = "Previous step"})

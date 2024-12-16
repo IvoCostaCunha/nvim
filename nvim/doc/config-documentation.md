@@ -136,25 +136,94 @@ These 3 configurations then have to be configured and loaded in a specific order
 Configuration code will not be fully present here since the point is to explain only the logic. But the file lspconfig.lua also has documentation if there is need of precisions on code missing here.
 
 #### List of LSP servers
-First of a list of LSP servers has to be defined.
+First of a list of LSP servers should to be defined.
 
 ```lua
 -- lua/plugins/lspconfig.lua
-local lsp_servers_to_install = {
-  "html",
-  "cssls",
-  "quick_lint_js",
-  "ts_ls",
-  "angularls",
-  "clangd",
-  "jdtls",
-  "lua_ls",
-  "pylsp",
-  "bashls",
-  "dockerls",
-  "texlab",
+local lsp_servers = {
+  {name = "lua_ls",
+    -- Enables Neovim diagnostics.
+    on_init = function(client)
+    local path = client.workspace_folders[1].name
+    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+      return
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        -- Most likely LuaJIT in the case of Neovim.
+        version = 'LuaJIT'
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        }
+      }
+    })
+    end,
+    settings = {
+      Lua = {
+        runtime = {
+          version = "LuaJIT"
+        }
+      }
+    }
+  },
+  -- ltex only provides orthographic corrections.
+  {name = "ltex",
+    settings = {
+      ltex = {
+        language = "EN-GB",
+        disabledRules = {
+          ["en-GB"] = {"PROFANITY"}
+        },
+        -- User dictionaries
+        dictionary = {
+          ["en-GB"] = {},
+          ["fr"] = {}
+        },
+        checkFrequency = "edit",
+        sentenceCacheSize = "2500",
+      }
+    }
+  },
+  {name = "bashls", settings = {}},
+  {name = "dockerls", settings = {}},
+  {name = "texlab", settings = {}},
+  {name = "html", settings = {}},
+  {name = "cssls", settings = {}},
+  {name = "quick_lint_js", settings = {}},
+  {name = "ts_ls", settings = {}},
+  {name = "angularls", settings = {}},
+  {name = "clangd", settings = {}},
+  {name = "jdtls", settings = {}},
 }
 ```
+
+"lsp_servers" is an array of the different servers that mason will install at launch each time.
+Each server has 2 mandatory properties.
+```lua
+local lsp_servers = {
+
+...
+
+    {
+        name = "<server name>",
+        settings = { ... <server settings> ... },
+        -- Optional
+        on_init = function() ... end
+    },
+
+...
+
+}
+```
+
+- **name**: Name of the servers as used in [MasonInstall](https://github.com/williamboman/mason.nvim/blob/main/doc/mason.txt#L201).
+- **settings**: specific LSP servers options.
+- **(optional) on_init**: function to execute when a LSP server is initiated. Not always used that is why it is optional.
 
 mason also manages [linters](https://en.wikipedia.org/wiki/Lint_%28software%29 "https://en.wikipedia.org/wiki/Lint_(software)"), [DAPs](https://microsoft.github.io/debug-adapter-protocol/) (Debug Adapter Protocol) servers and code formatters.  
 In this example not all are LSPs , some are linters only, they do not provide any completion suggestions.  
@@ -201,24 +270,41 @@ Then mason installed LSP servers must be connected to lspconfig.
     dependencies = {"hrsh7th/cmp-nvim-lsp"},
     
     ...
-    
+
     config = function()
       local cmp_nvim_lsp = require("cmp_nvim_lsp")
       local lspconfig = require("lspconfig")
 
-      -- Adding LSP capabilities to nvim-cmp .
+      -- Adding LSP capabilities to nvim-cmp.
       local lsp_capabilities = vim.lsp.protocol.make_client_capabilities()
       lsp_capabilities = cmp_nvim_lsp.default_capabilities(lsp_capabilities)
 
       -- Recovering mason-lspconfig installed servers, not only those that are in lsp_servers_to_install.
-      local lsp_servers = require("mason-lspconfig").get_installed_servers()
-
-      -- For each server the setup in run with the override of capabilities property. 
-      for _,s in pairs(lsp_servers) do
-        lspconfig[s].setup({
-          capabilities = lsp_capabilities
-        })
+      -- Then these are added to lsp_servers without any settings.
+      local mason_installed_lsp_servers = require("mason-lspconfig").get_installed_servers()
+      for _,ms in pairs(mason_installed_lsp_servers) do
+        if not is_in_lsp_servers(lsp_servers, ms) then
+          table.insert(lsp_servers, { name = ms, settings = {} })
+        end
       end
+
+      -- For each server the setup in run with the override of capabilities and settings properties if on_init exists it is also override. 
+      for _,s in pairs(lsp_servers) do
+        if s.on_init ~= nil then
+          lspconfig[s.name].setup({
+            capabilities = lsp_capabilities,
+            settings = s.settings,
+            on_init = s.on_init
+          })
+        else
+          lspconfig[s.name].setup({
+            capabilities = lsp_capabilities,
+            settings = s.settings,
+          })
+        end
+      end
+
+    end
   },
 ```
 
@@ -293,4 +379,4 @@ nvim-cmp has a number of properties that have to be set in its setup.
 
 ```
 
-A this point autocompletion should be enabled.
+At this point autocompletion should be enabled.
