@@ -6,8 +6,8 @@ return {
 
   event = "VeryLazy",
   opts = {
-    enabled = true;
-    indent = {char = "╎"},
+    enabled = true,
+    indent = { char = "╎" },
     whitespace = {
       remove_blankline_trail = false,
     },
@@ -17,8 +17,7 @@ return {
       show_exact_scope = true
     },
     exclude = {
-      filetypes = {"c", "cpp", "cs", "java"}
+      filetypes = { "c", "cpp", "cs", "java" }
     }
   },
 }
-

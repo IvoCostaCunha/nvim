@@ -10,16 +10,16 @@ vim.opt.expandtab = true
 vim.opt.shiftround = true
 vim.opt.autoindent = true
 vim.opt.breakindent = true
--- sbr -> Display the "showbreak" value before applying additional indent.
--- vim.opt.breakindentopt = sbr
+vim.opt.smartindent = true
 vim.opt.linebreak = true
 
 -- Refresh rate
-vim.o.updatetime = 250
+vim.opt.updatetime = 250
 
 -- UI config
 vim.opt.number = true
 vim.opt.relativenumber = true
+vim.opt.cursorline = true
 
 -- UI colors
 vim.opt.termguicolors = true

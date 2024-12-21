@@ -1,19 +1,25 @@
 # Documentation for nvim configuration
 
+
 ## Table of contents
-1.  [General](#General)
-    1.  [Directory structure](#Directory-structure)
-    2.  [File loading order](#File-loading-order)
-2.  [Neovim configuration](#Neovim-configuration)
-    1.  [Keybinds](#Keybinds)
-3.  [Plugins configurations](#Plugin-configurations)
-    1.  [Plugin configuration template](#Plugin-configuration-template)
-	2.  [Themes](#Themes)
-    3.  [LSP configuration](#LSP-configuration)
-        1.  [List of LSP servers](#List-of-LSP-server)
-        2.  [mason plugin configuration](#mason-plugin-configuration)
-        3.  [lspconfig configuration](#lspconfig-configuration)
-        4.  [nvim-cmp plugin configuration](#nvim-cmp-plugin-configuration)
+1. [General](#General)
+    1. [Directory structure](#directory-structure)
+    2. [File loading order](#file-loading-order)
+2. [Neovim configuration](#neovim-configuration)
+    1. [Keybinds](#keybinds)
+        1. [Keybinds logic](#keybinds-logic)
+3. [Plugins configurations](#lugin-configurations)
+    1. [Plugin configuration template](#plugin-configuration-template)
+    2. [Plugin list](#plugin-list)
+	3. [Themes](#themes)
+    4. [Vimtex](#vimtex)
+    5. [Lualine](#lualine)
+    6. [LSP  and DAP configuration](#lsp-and-dap-configuration)
+        1. [List of LSP servers](#list-of-lsp-servers)
+        2. [mason plugin configuration](#mason-plugin-configuration)
+        3. [mason-nvim-dap plugin](#mason-nvim-dap-plugin)
+        4. [lspconfig configuration](#lspconfig-configuration)
+        5. [nvim-cmp plugin configuration](#nvim-cmp-plugin-configuration)
 
 ## General
 ### Directory structure
@@ -40,9 +46,9 @@ nvim
 init.lua only import other files.  
 In order of import :
 
-1.  options.lua - vim.opt options, same as vim set options.
-2.  lazy.lua - lazy.nvim package manager configuration.
-3.  keybinds.lua - Contains most keybinds, it's loaded last since it may require plugins loaded by Lazy.
+1. options.lua - vim.opt options, same as vim set options.
+2. lazy.lua - lazy.nvim package manager configuration.
+3. keybinds.lua - Contains most keybinds, it's loaded last since it may require plugins loaded by Lazy.
 
 ## Neovim configuration
 The general configuration of Neovim is located in the config directory.
@@ -60,6 +66,33 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 -- Can be a lua function or a vim <cmd>.
 -- {desc} is optional but used for which-key plugin keybinds descriptions.
 ```
+
+There are also keybinds groups declared. These are a feature of [which-key](https://github.com/folke/which-key.nvim) plugin.
+Groups are like a category of bindings. For example all Telescope bindings start with `<leader>f`, so it is also used as group for all Telescope bindings.
+
+```lua
+lua/config/keybinds.lua
+
+local wk = require("which-key")
+wk.add {
+  { "<leader>f",  group = "Telescope" },
+  { "<leader>l",  group = "LaTeX" },
+  { "<leader>g",  group = "GoTo" },
+  { "<leader>e",  group = "LSP Diagnostics" },
+  { "<leader>fG", group = "Telescope git" },
+  { "<leader>fl", group = "Telescope LSP" },
+  { "<leader>d",  group = "Debug" },
+  { "<leader>x",  group = "Diagnostic list" },
+  { "<leader>m",  group = "Markdown preview" },
+}
+```
+
+#### Keybinds logic
+Keybinds follow a certain logic when possible.
+- Keybinds that focus something use Vim default bindings for movement. For example moving between buffers use `Alt` and `h` or `l` to move to previous or next buffer.
+- Keybinds that delete something use `w`. For example `Alt+w` deletes a buffer.
+- Keybinds that start a function or an action start by the first letter of that action. For example `<leader>lc` start LaTeX compiler. (l(atex)c(compile))
+- Finally more basic Vim function don't use `<leader>`, `<leader>` is used for plugin or LSP functions.
 
 ## Plugins configurations
 Plugins individual configurations are then in the plugins directory.  
@@ -101,9 +134,29 @@ return {
 }
 ```
 
-Other properties can be overridden, see lazy.nvim [documentation](https://lazy.folke.io/spec) documentation for it.
+Other properties can be overridden, see lazy.nvim [documentation](https://lazy.folke.io/spec).
 
-In this repository an effort to separate plugin configurations has been made for code clarity, but the `return{}` function can return multiple configurations instead of only one, they juste have to be in an array.
+In this repository an effort to separate plugin configurations has been made for code clarity, but the `return{}` function can return multiple configurations instead of only one, they just have to be in an array.
+
+### Plugin list
+Plugins used by this configuration of Neovim, some use dependencies that won't be listed here.
+- [alpha-nvim](https://github.com/goolord/alpha-nvim) : Neovim welcome page.
+- [catppucin](https://github.com/catppuccin/nvim) : Used theme.
+- [indent-backline](https://github.com/lukas-reineke/indent-blankline.nvim) : A line that displayed indents.
+- [lazy](https://lazy.folke.io/) : Plugin manager.
+- [lualine](https://github.com/nvim-lualine/lualine.nvim) : Makes easy to configure the statusline, and has features to configure the tabline and the titleline.
+- [mason](https://github.com/williamboman/mason.nvim) : Installs LSP, linters, DAP and formatters.
+- [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim) : Displays a file tree and has features to edit files.
+- [highlight-colors](https://github.com/brenoprata10/nvim-highlight-colors) : Displays colours of different formats of colours.
+- [lspconfig](https://github.com/neovim/nvim-lspconfig) : Presets of LSP servers. Used to configure LSPs in Neovim.
+- [telescope](https://github.com/nvim-telescope/telescope.nvim) : Simple and fast way to find different files, information and more.
+- [vimtex](https://github.com/lervag/vimtex) : LaTeX tools for Vim.
+- [which-key](https://github.com/folke/which-key.nvim) : Displays keybinds possibilities with descriptions as they are typed.
+- [glow](https://github.com/ellisonleao/glow.nvim) : Displays a preview of Markdown files using [Glow CLI utility](https://github.com/charmbracelet/glow).
+- [tree-sitter](https://github.com/tree-sitter/tree-sitter) : Code analysis and improved colouration.
+- [trouble](https://github.com/folke/trouble.nvim) : A more easily readable output of telescope functionalities.
+- [dap](https://github.com/mfussenegger/nvim-dap) : Neovim debugger adapter protocol Plugin.
+- [dap-ui](https://github.com/rcarriga/nvim-dap-ui) : A better UI for dap.
 
 ### Themes
 Published themes like [tokyonight](https://github.com/folke/tokyonight.nvim) are plugins and can be configured in the same way as the previous template.
@@ -122,18 +175,53 @@ If the theme is to be the main theme loaded and setup at start then it has to in
 }
 ```
 
+### Vimtex
+Vimtex is the plugin that facilitates editing LaTeX (.tex) files. It provides a lot of extra tools and syntax help.
+One of these tools in a real time viewer that updates each time the LaTeX file is recompiled. In Linux distributions this preview is done with [zathura](https://pwmt.org/projects/zathura/) PDF viewer. 
+However, on macOS zathura can have compatibility problems, so an easier solution is to use [Skim](https://skim-app.sourceforge.io/) instead.
 
-### LSP configuration
+To do so a simple change in Vimtex configuration must be done.
+```lua
+return {
+  "lervag/vimtex",
+  event = "VeryLazy",
+  init = function()
+    -- VimTeX configuration goes here, e.g.
+    -- Replace zathura by skim here !
+    vim.g.vimtex_view_method = "zathura"
+  end
+}
+```
+
+zathura can also be used if the document is opened manually with `sh zathura /path/to/file`, but the command `:VimtexView` won't be functional.
+
+### Lualine
+[lualine](https://github.com/nvim-lualine/lualine.nvim) provides an easier way to configure the statusline.
+It also features a way to configure the tabline and the titleline.
+In this configuration lualine is used to display on the top left all open buffers and in the top right the tabs open and for each tab which buffers are open in different windows.
+
+```lua
+tabline = {
+    lualine_a = { "buffers" },
+    lualine_b = {},
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = { "windows" },
+    lualine_z = { "tabs" }
+},
+```
+
+### LSP and DAP configuration
 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) is builtin Neovim. It provides to [Neovim LSP Client](https://neovim.io/doc/user/lsp.html) (Language Server Protocol) presets for configurations of each [LSP Server](https://microsoft.github.io/language-server-protocol/).
 
 With nvim-lspconfig alone each LSP Server has to be installed by the user in the system. To simplify LSP server management the [mason](https://github.com/williamboman/mason.nvim) plugin is used. It install LSP Servers during its setup or by Neovim command line, both are persistent.
 
 Neovim LSP Client has also no automatic autocompletion only a keybinds to complete, by default with the keybind `<C-x> / <C-o>`.  
-Another plugin [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) is therefore used to enable a [VS-Codium](https://vscodium.com/) like autocompletion.
+Another plugin [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) is therefore used to enable a [VSCodium](https://vscodium.com/) like autocompletion.
 
 These 3 configurations then have to be configured and loaded in a specific order.
 
-Configuration code will not be fully present here since the point is to explain only the logic. But the file lspconfig.lua also has documentation if there is need of precisions on code missing here.
+Configuration code will not be fully present here since the point is to explain only the logic. But the file lspconfig. The actual files also have documentation if there is need of precisions on code missing here.
 
 #### List of LSP servers
 First of a list of LSP servers should to be defined.
@@ -202,7 +290,7 @@ local lsp_servers = {
 }
 ```
 
-"lsp_servers" is an array of the different servers that mason will install at launch each time.
+`lsp_servers` is an array of the different servers that mason will install at launch if not installed already.
 Each server has 2 mandatory properties.
 ```lua
 local lsp_servers = {
@@ -229,15 +317,17 @@ mason also manages [linters](https://en.wikipedia.org/wiki/Lint_%28software%29 "
 In this example not all are LSPs , some are linters only, they do not provide any completion suggestions.  
 For example for Javascript [quick-lint-js](https://quick-lint-js.com/) linter is used with [ts_ls](https://github.com/typescript-language-server/typescript-language-server) LSP.
 
-However only LSPs will be covered in this section.
+However, only LSPs will be covered in this section.
 
-*Ideally each server should have its options set here but I've not not done it yet.*
+*Ideally each server should have its options set here, but I've not done it yet.*
 
 #### mason plugin configuration
 This list will then be installed by mason.
 
 ```lua
 -- lua/plugins/lspconfig.lua
+...
+
 {
     "williamboman/mason.nvim",
     config = function()
@@ -245,17 +335,70 @@ This list will then be installed by mason.
     end
 },
 
-  {
+{
     "williamboman/mason-lspconfig.nvim",
     opts = {
         -- Install LSP servers
-      	ensure_installed = lsp_servers_to_install,
-      	automatic_installation = true
+        ensure_installed = lsp_servers_to_install,
+        automatic_installation = true
     }
 },
+
+...
 ```
 
 mason require these 2 plugins.
+
+#### mason-nvim-dap
+[mason-nvim-dap](https://github.com/jay-babu/mason-nvim-dap.nvim) is a plugin that configures DAPs (Debugger Adaptater Protocol).
+
+```lua
+-- lua/plugins/lspconfig.lua
+{
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end
+},
+
+...
+
+{
+    "mfussenegger/nvim-dap",
+    keys = {
+      { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Add breakpoint" }
+    },
+},
+
+{
+    "jay-babu/mason-nvim-dap.nvim",
+    opts = {
+      ensure_installed = dap_list,
+      handlers = {},
+    },
+    config = function(_, opts)
+      require("mason-nvim-dap").setup(opts)
+    end
+},
+
+...
+```
+These plugins must be loaded in this specific order.
+
+
+`dap_list` is a list of DAP with [specific names](https://github.com/jay-babu/mason-nvim-dap.nvim/blob/main/lua/mason-nvim-dap/mappings/source.lua) for mason-nvim-dap. 
+
+```lua
+...
+
+-- lua/plugins/lspconfig.lua
+local dap_list = { "python", "codelldb"}
+
+...
+```
+
+#### dap-ui
+dap-ui is a plugin that displays a better UI for nvim-dap
 
 #### lspconfig configuration
 Then mason installed LSP servers must be connected to lspconfig.
@@ -308,7 +451,7 @@ Then mason installed LSP servers must be connected to lspconfig.
   },
 ```
 
-At this point Neovim LSP Client can use the LSP servers but not offer autocompletions.  
+At this point Neovim LSP Client can use the LSP servers but not offer auto-completions.  
 So nvim-cmp still need to be setup.
 
 #### nvim-cmp plugin configuration
@@ -380,3 +523,18 @@ nvim-cmp has a number of properties that have to be set in its setup.
 ```
 
 At this point autocompletion should be enabled.
+
+## Performance
+This tables is done with values obtained via lazy internal profiler.
+Nvim is started 10 times on this configuration to determine an average.
+The Macbook Pro is tested on battery.
+
+Macbook pro configuration :
+- CPU : i5@2,3 GHz (4 Cores)
+- GPU : Intel Iris Plus Graphics 655
+- RAM : 8 Gb LPDDR3 @2133MHz
+- OS : macOS Sequoia 15.2
+
+| PC | date | average startup time | best time | worst time |
+| :---: | :---: | :---: | :--: | :--: |
+| Macbook Pro i5 2018 | 20/12/2024 | | | | 

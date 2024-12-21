@@ -4,27 +4,28 @@
 -- settings -> options of the server.
 -- on_init -> (Optional) If an on_init function is needed.
 local lsp_servers = {
-  {name = "lua_ls",
+  {
+    name = "lua_ls",
     -- Enables Neovim diagnostics.
     on_init = function(client)
-    local path = client.workspace_folders[1].name
-    if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
-      return
-    end
+      local path = client.workspace_folders[1].name
+      if vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc') then
+        return
+      end
 
-    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-      runtime = {
-        -- Most likely LuaJIT in the case of Neovim.
-        version = 'LuaJIT'
-      },
-      -- Make the server aware of Neovim runtime files
-      workspace = {
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME
+      client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+        runtime = {
+          -- Most likely LuaJIT in the case of Neovim.
+          version = 'LuaJIT'
+        },
+        -- Make the server aware of Neovim runtime files
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            vim.env.VIMRUNTIME
+          }
         }
-      }
-    })
+      })
     end,
     settings = {
       Lua = {
@@ -35,12 +36,13 @@ local lsp_servers = {
     }
   },
   -- ltex only provides orthographic corrections.
-  {name = "ltex",
+  {
+    name = "ltex",
     settings = {
       ltex = {
         language = "EN-GB",
         disabledRules = {
-          ["en-GB"] = {"PROFANITY"}
+          ["en-GB"] = { "PROFANITY" }
         },
         -- User dictionaries
         dictionary = {
@@ -52,27 +54,29 @@ local lsp_servers = {
       }
     }
   },
-  {name = "bashls", settings = {}},
-  {name = "dockerls", settings = {}},
-  {name = "texlab", settings = {}},
-  {name = "html", settings = {}},
-  {name = "cssls", settings = {}},
-  {name = "quick_lint_js", settings = {}},
-  {name = "ts_ls", settings = {}},
-  {name = "angularls", settings = {}},
-  {name = "clangd", settings = {}},
-  {name = "jdtls", settings = {}},
+  { name = "bashls",        settings = {} },
+  { name = "dockerls",      settings = {} },
+  { name = "texlab",        settings = {} },
+  { name = "html",          settings = {} },
+  { name = "cssls",         settings = {} },
+  { name = "quick_lint_js", settings = {} },
+  { name = "ts_ls",         settings = {} },
+  { name = "angularls",     settings = {} },
+  { name = "clangd",        settings = {} },
+  { name = "jdtls",         settings = {} },
 }
+
+local dap_list = { "python", "codelldb"}
 
 -- Reducing to an array with only the names of LSP servers.
 local lsp_servers_to_install = {}
-for key,value in pairs(lsp_servers) do
+for key, value in pairs(lsp_servers) do
   table.insert(lsp_servers_to_install, value.name)
 end
 
 local function is_in_lsp_servers(list, item)
   local is_in = false
-  for _,i in pairs(list) do
+  for _, i in pairs(list) do
     if i.name == item then is_in = true end
   end
   return is_in
@@ -95,12 +99,54 @@ return {
     }
   },
 
+  -- nvim-dap has no setup() function !
+  {
+    "mfussenegger/nvim-dap",
+    keys = {
+      { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Add breakpoint" }
+    },
+  },
+  
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    opts = {
+      ensure_installed = dap_list,
+      handlers = {},
+    }
+  },
+  
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
+    config = function()
+      local dap, dapui = require("dap"), require("dapui")
+
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
+
+      require("nvim-dap-ui").setup()
+    end,
+    keys = {
+      { "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", desc = "Toggle debug UI" }
+    }
+  },
+
   -- nvim-lspconfig is a collection of lsp servers templates and is connected to mason by mason-lspconfig.
   {
     "neovim/nvim-lspconfig",
     event = "VeryLazy",
     -- nvim-lspconfig is dependent on cmp-nvim-lsp being loaded to be able to be used by cmp plugins as source completion.
-    dependencies = {"hrsh7th/cmp-nvim-lsp"},
+    dependencies = { "hrsh7th/cmp-nvim-lsp" },
 
     init = function()
       -- LSP diagnostics display configuration.
@@ -117,8 +163,8 @@ return {
         callback = function()
           local opts = {
             focusable = false,
-            -- severity = "Error", -- To limit which diagnostic types trigger the floating window. 
-            close_events = {"BufLeave", "CursorMoved", "InsertEnter", "FocusLost"},
+            -- severity = "Error", -- To limit which diagnostic types trigger the floating window.
+            close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
             -- source is the source of the error like diagnostics from lspconfig or other
             source = "if_many",
             -- prefix = "",
@@ -163,14 +209,14 @@ return {
       -- Recovering mason-lspconfig installed servers, not only those that are in lsp_servers_to_install.
       -- Then these are added to lsp_servers without any settings.
       local mason_installed_lsp_servers = require("mason-lspconfig").get_installed_servers()
-      for _,ms in pairs(mason_installed_lsp_servers) do
+      for _, ms in pairs(mason_installed_lsp_servers) do
         if not is_in_lsp_servers(lsp_servers, ms) then
           table.insert(lsp_servers, { name = ms, settings = {} })
         end
       end
 
-      -- For each server the setup in run with the override of capabilities and settings properties. If on_init exists it is also override. 
-      for _,s in pairs(lsp_servers) do
+      -- For each server the setup in run with the override of capabilities and settings properties. If on_init exists it is also override.
+      for _, s in pairs(lsp_servers) do
         if s.on_init ~= nil then
           lspconfig[s.name].setup({
             capabilities = lsp_capabilities,
@@ -184,7 +230,6 @@ return {
           })
         end
       end
-
     end
   },
   {
@@ -225,13 +270,13 @@ return {
         -- REQUIRED, cmp autocomplete sources.
         sources = cmp.config.sources(
           {
-            {name = "nvim_lsp"}, -- keyboard_lenght => To auto complete at x chars.
-            {name = "path"},
-            {name = "buffer"},
-            {name = "luasnip"}
+            { name = "nvim_lsp" }, -- keyboard_lenght => To auto complete at x chars.
+            { name = "path" },
+            { name = "buffer" },
+            { name = "luasnip" }
           },
           {
-            {name = "buffer"}
+            { name = "buffer" }
           }
         ),
 
@@ -242,14 +287,14 @@ return {
             winhighlight = "Normal:CmpNormal"
           },
           documentation = {
-            border = "rounded",
-            winhighlight  = "Normal:CmpDocNormal"
+            border       = "rounded",
+            winhighlight = "Normal:CmpDocNormal"
           },
         },
 
         -- To display a prefix or icon before the suggestion indicating its source.
         formating = {
-          fields = {"menu", "abbr", "kind"},
+          fields = { "menu", "abbr", "kind" },
           format = function(entry, item)
             local menu_icon = {
               nvim_lsp = "[lsp]",
@@ -275,25 +320,25 @@ return {
 
           -- Use Tab to navigate suggestions.
           ["<Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_next_item()
-						elseif luasnip.expand_or_jumpable() then
-							luasnip.expand_or_jump()
-						else
-							fallback()
-						end
-					end, { "i", "s" }),
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
 
           -- Use Alt-Tab to navigate in reverse.
           ["<A-Tab>"] = cmp.mapping(function(fallback)
-						if cmp.visible() then
-							cmp.select_prev_item()
-						elseif luasnip.jumpable(-1) then
-							luasnip.jump(-1)
-						else
-							fallback()
-						end
-					end, { "i", "s" })
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { "i", "s" })
         }),
       })
 
@@ -301,8 +346,8 @@ return {
       cmp.setup.cmdline("/", {
         completion = { autocomplete = false },
         sources = {
-            -- { name = "buffer" }
-            { name = "buffer", opts = { keyword_pattern = [=[[^[:blank:]].*]=] } }
+          -- { name = "buffer" }
+          { name = "buffer", opts = { keyword_pattern = [=[[^[:blank:]].*]=] } }
         }
       })
 
@@ -310,12 +355,12 @@ return {
       cmp.setup.cmdline(":", {
         completion = { autocomplete = false },
         sources = cmp.config.sources(
-        {
+          {
             { name = "path" }
-        },
-        {
+          },
+          {
             { name = "cmdline" }
-        })
+          })
       })
     end
   }

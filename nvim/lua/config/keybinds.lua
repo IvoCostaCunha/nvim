@@ -1,76 +1,95 @@
 -- <leader> key is set in config/options.lua
 -- <cmd> equals to ":"
 
+-- The following keybinds set by whick-key are only used to show a general description in which-key plugin popup keybinds "groups".
+-- Example "<leader>g" shows GoTo as description, before showing "Go to definition" when "<leader>gD" (go to definition) is pressed.
+local wk = require("which-key")
+wk.add {
+  { "<leader>f",  group = "Telescope" },
+  { "<leader>l",  group = "LaTeX" },
+  { "<leader>g",  group = "GoTo" },
+  { "<leader>e",  group = "LSP Diagnostics" },
+  { "<leader>fG", group = "Telescope git" },
+  { "<leader>fl", group = "Telescope LSP" },
+  { "<leader>d",  group = "Debug" },
+  { "<leader>x",  group = "Diagnostic list" },
+  { "<leader>m",  group = "Markdown preview" },
+}
+
+-- Keybinds
 local map = vim.keymap
 
 -- Buffers
-map.set("n", "<leader>b", "", {desc = "Buffers"})
-map.set("n", "<leader>ba", "<cmd>bn<cr>", {desc = "New Buffer"})
-map.set("n", "<leader>bp", "<cmd>bp<cr>", {desc = "Previous buffer"})
-map.set("n", "<leader>bd", "<cmd>bd<cr>", {desc = "Delete current buffer"})
-
+map.set("n", "<A-n>", "<cmd>new<cr>", { desc = "New buffer (new window)" })
+map.set("n", "<A-a>", "<cmd>enew<cr>", { desc = "New buffer" })
+map.set("n", "<A-l>", "<cmd>bn<cr>", { desc = "Next buffer" })
+map.set("n", "<A-h>", "<cmd>bp<cr>", { desc = "Previous buffer" })
+map.set("n", "<A-w>", "<cmd>bd<cr>", { desc = "Delete current buffer" })
 
 -- Tabs
-map.set("n", "<leader>t", "", {desc = "Tabs"})
-map.set("n", "<leader>ta", "<cmd>tabnew<cr>", {desc = "Add new tab"})
-map.set("n", "<leader>th", "<cmd>tabprevious<cr>", {desc = "Previous tab"})
-map.set("n", "<leader>tl", "<cmd>tabnext<cr>", {desc = "Next tab"})
-map.set("n", "<leader>tx", "<cmd>tabclose<cr>", {desc = "Close current tab"})
+map.set("n", "<C-n>", "<cmd>tabnew<cr>", { desc = "Add new tab" })
+map.set("n", "<C-l>", "<cmd>tabnext<cr>", { desc = "Next tab" })
+map.set("n", "<C-h>", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
+map.set("n", "<C-w>", "<cmd>tabclose<cr>", { desc = "Close current tab" })
 
 -- Telescope
 local telescope = require("telescope.builtin")
-map.set("n", "<leader>f", "", {desc = "Telescope"})
-map.set("n", "<leader>ff", telescope.find_files, {desc ="Telescope find files"})
-map.set("n", "<leader>fg", telescope.live_grep, {desc = "Telescope live grep"})
-map.set("n", "<leader>fb", telescope.buffers, {desc = "Telescope buffers"})
-map.set("n", "<leader>fo", telescope.oldfiles, {desc = "Telescope old_files"})
-map.set("n", "<leader>fm", telescope.man_pages, {desc = "Telescope man_pages"})
-map.set("n", "<leader>ft", telescope.colorscheme, {desc = "Telescope colorscheme"})
-map.set("n", "<leader>fp", telescope.search_history, {desc = "Telescope search_history"})
-map.set("n", "<leader>fh", telescope.help_tags, {desc = "Telescope help_tags"})
+map.set("n", "<leader>ff", telescope.find_files, { desc = "Find files" })
+map.set("n", "<leader>fg", telescope.live_grep, { desc = "Live grep" })
+map.set("n", "<leader>fb", telescope.buffers, { desc = "Buffers" })
+map.set("n", "<leader>fd", telescope.diagnostics, { desc = "Diagnostics" })
+map.set("n", "<leader>fo", telescope.oldfiles, { desc = "Old_files" })
+map.set("n", "<leader>fm", telescope.man_pages, { desc = "Man pages" })
+map.set("n", "<leader>ft", telescope.colorscheme, { desc = "Colorschemes" })
+map.set("n", "<leader>fp", telescope.search_history, { desc = "Search history" })
+map.set("n", "<leader>fh", telescope.help_tags, { desc = "Help tags" })
+map.set("n", "<leader>fd", telescope.lsp_definitions, { desc = "LSP definitions" })
+map.set("n", "<leader>fi", telescope.lsp_implementations, { desc = "LSP implementations" })
+map.set("n", "<leader>fs", telescope.lsp_document_symbols, { desc = "LSP symbols" })
+map.set("n", "<leader>fr", telescope.lsp_references, { desc = "LSP references" })
 
--- Trouble
-map.set("n", "<leader>x", "", {desc = "Diagnostics list"})
+map.set("n", "<leader>fGc", telescope.git_commits, { desc = "Git commit" })
+map.set("n", "<leader>fGb", telescope.git_branches, { desc = "Git branch" })
+map.set("n", "<leader>fGs", telescope.git_status, { desc = "Git status" })
 
 -- LateX (Vimtext)
-map.set("n", "<leader>l", "", {desc = "Latex"})
-map.set("n", "<leader>lt", "<cmd>VimtexTocToggle<cr>", {desc = "Latex toggle"})
-map.set("n", "<leader>lc", "<cmd>VimtexCompile<cr>", {desc = "Latex compile"})
-map.set("n", "<leader>lr", "<cmd>VimtexReload<cr>", {desc = "Latex reload"})
-map.set("n", "<leader>ls", "<cmd>VimtexStop<cr>", {desc = "Latex stop"})
-map.set("n", "<leader>lcc", "<cmd>VimtexClearCache<cr>", {desc = "Latex clear cache"})
-map.set("n", "<leader>lv", "<cmd>VimtexView<cr>", {desc = "Latex view"})
-map.set("n", "<leader>lx", "<cmd>VimtexErrors<cr>", {desc = "Latex errors"})
-map.set("n", "<leader>li", "<cmd>VimtexInfo<cr>", {desc = "Latex info"})
+map.set("n", "<leader>lt", "<cmd>VimtexTocToggle<cr>", { desc = "LaTeX toggle" })
+map.set("n", "<leader>lc", "<cmd>VimtexCompile<cr>", { desc = "LaTeX compile" })
+map.set("n", "<leader>lr", "<cmd>VimtexReload<cr>", { desc = "LaTeX reload" })
+map.set("n", "<leader>ls", "<cmd>VimtexStop<cr>", { desc = "LaTeX stop" })
+map.set("n", "<leader>lw", "<cmd>VimtexClean<cr>", { desc = "LaTeX clean" })
+map.set("n", "<leader>lv", "<cmd>VimtexView<cr>", { desc = "LaTeX view" })
+map.set("n", "<leader>lx", "<cmd>VimtexErrors<cr>", { desc = "LaTeX errors" })
+map.set("n", "<leader>li", "<cmd>VimtexInfo<cr>", { desc = "LaTeX info" })
 
 -- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function()
-    map.set("n", "<leader>g", "", {desc = "GoTo"})
-    map.set("n", "<leader>k", vim.lsp.buf.hover, {desc = "Cursor doc"})
-    map.set("n", "<leader>gD", vim.lsp.buf.definition, {desc = "Go to definition"})
-    map.set("n", "<leader>gd", vim.lsp.buf.declaration, {desc = "Go to declaration(s)"})
-    map.set("n", "<leader>gi", vim.lsp.buf.implementation, {desc = "Go to implementation"})
-    map.set("n", "<leader>gs", vim.lsp.buf.signature_help, {desc = "Signature help"})
-    
-    map.set("n", "<leader>R", vim.lsp.buf.rename, {desc = "Rename"})
-    
-    map.set("n", "<leader>e", "", {desc = "Error diagnostics"})
-    map.set("n", "<leader>ef", vim.diagnostic.open_float, {desc = "Diagnostic open float"})
-    map.set("n", "<leader>eh", vim.diagnostic.goto_prev, {desc = "Diagnostic previous"})
-    map.set("n", "<leader>el", vim.diagnostic.goto_next, {desc = "Diagnostic next"})
+    map.set("n", "K", vim.lsp.buf.hover, { desc = "Cursor doc" })
+    map.set("n", "R", vim.lsp.buf.rename, { desc = "Rename" })
+    map.set("n", "F", vim.lsp.buf.format, { desc = "Format buffer" })
+
+    map.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
+    map.set("n", "gd", vim.lsp.buf.declaration, { desc = "Go to declaration(s)" })
+    map.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+    map.set("n", "gs", vim.lsp.buf.signature_help, { desc = "Signature help" })
+
+
+    map.set("n", "ef", vim.diagnostic.open_float, { desc = "Diagnostic open float" })
+    map.set("n", "el", vim.diagnostic.goto_next, { desc = "Diagnostic next" })
+    map.set("n", "eh", vim.diagnostic.goto_prev, { desc = "Diagnostic previous" })
   end
 })
 
--- lazy.vim allows to load plugins on input but if require(<plugin>) is used then the plugin is loaded before anyway. So these keybinds must be set per plugin at least until a better solution arises.
-
 -- DAP (Debug) -> In lua/plugins/dap.lua
 -- map.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<cr>", {desc = "Add breakpoint"}) -- set in plugin conf file
-map.set("n", "<leader>d", "", {desc = "Debug"})
-map.set("n", "<leader>dc", "<cmd>DapContinue<cr>", {desc ="Launch debug"})
-map.set("n", "<leader>dn", "<cmd>DapStepOver<cr>", {desc = "Next step"})
-map.set("n", "<leader>dp", "<cmd>DapStepInto<cr>", {desc = "Previous step"})
-map.set("n", "<leader>di", "<cmd>DapToggleRepl<cr>", {desc = "Inspect state"})
-map.set("n", "<leader>dr", "<cmd>DapRestartFrame<cr>", {desc = "Restart DAP"})
+map.set("n", "<leader>dc", "<cmd>DapContinue<cr>", { desc = "Continue" })
+map.set("n", "<leader>dn", "<cmd>DapStepInto<cr>", { desc = "Next step" })
+map.set("n", "<leader>dp", "<cmd>DapStepOver<cr>", { desc = "Previous step" })
+map.set("n", "<leader>di", "<cmd>DapToggleRepl<cr>", { desc = "Inspect state" })
+map.set("n", "<leader>dr", "<cmd>DapRestartFrame<cr>", { desc = "Restart" })
 
+-- lazy.vim allows to load plugins on input but if require(<plugin>) is used then the plugin is loaded before anyway. So these keybinds must be set per plugin at least until a better solution arises.
+-- Trouble -> in lua/plugins/trouble.lua
 -- Cmp -> In lua/plugins/lspconfig.lua
+-- Markdown preview -> in lua/plugins/glow.lua

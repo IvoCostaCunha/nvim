@@ -1,11 +1,12 @@
 return {
   "nvim-lualine/lualine.nvim",
-  requires = {"nvim-tree/nvim-web-icons", opt = true},
+  requires = { "nvim-tree/nvim-web-icons", opt = true },
+  event = "VeryLazy",
   opts = {
     theme = "catppuccin",
     icons_enables = true,
-    component_separators = {left = "", right = ""},
-    section_separators = { left = "", right = ""},
+    component_separators = { left = "", right = "" },
+    section_separators = { left = "", right = "" },
     disabled_filetypes = {
       statusline = {},
       winbar = {},
@@ -20,23 +21,37 @@ return {
       winbar = 1000,
     },
     sections = {
-      lualine_a = {"mode"},
-      lualine_b = {"branch", "diff", "diagnostics"},
-      lualine_c = {"filename"},
-      lualine_x = {"encoding", "fileformat", "filetype"},
-      lualine_y = {"progress"},
-      lualine_z = {"location"}
+      lualine_a = { "mode" },
+      lualine_b = { "branch", "diff", "diagnostics" },
+      lualine_c = { "filename", "searchcount", "selectioncount" },
+      lualine_x = { "encoding", "filesize", "fileformat", "filetype" },
+      lualine_y = { "progress" },
+      lualine_z = { "location" }
     },
     inactive_sections = {
       lualine_a = {},
       lualine_b = {},
-      lualine_c = {"filename"},
-      lualine_x = {"location"},
+      lualine_c = { "filename" },
+      lualine_x = { "location" },
       lualine_y = {},
       lualine_z = {}
     },
-    tabline = {},
-    winbar = {},
+    tabline = {
+      lualine_a = { "buffers" },
+      lualine_b = {},
+      lualine_c = {},
+      lualine_x = {},
+      lualine_y = { "windows" },
+      lualine_z = { "tabs" }
+    },
+    winbar = {
+      -- lualine_a = {"tabs"},
+      -- lualine_b = {},
+      -- lualine_c = {},
+      -- lualine_x = {},
+      -- lualine_y = {},
+      -- lualine_z = {}
+    },
     inactive_winbar = {},
     extensions = {}
   }

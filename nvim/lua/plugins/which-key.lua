@@ -1,14 +1,12 @@
 return {
   "folke/which-key.nvim",
   dependencies = {
-    { "echasnovski/mini.nvim", version = "*" },
-    {"nvim-tree/nvim-web-devicons"}
+    { "echasnovski/mini.nvim",      version = "*" },
+    { "nvim-tree/nvim-web-devicons" }
   },
   event = "VeryLazy",
   opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
+    preset = "helix",
   },
   keys = {
     {
