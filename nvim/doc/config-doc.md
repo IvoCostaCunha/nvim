@@ -14,7 +14,8 @@
 	3. [Themes](#themes)
     4. [Vimtex](#vimtex)
     5. [Lualine](#lualine)
-    6. [LSP  and DAP configuration](#lsp-and-dap-configuration)
+    6. [Render-markdown](#render-markdown)
+   7 . [LSP  and DAP configuration](#lsp-and-dap-configuration)
         1. [List of LSP servers](#list-of-lsp-servers)
         2. [mason plugin configuration](#mason-plugin-configuration)
         3. [mason-nvim-dap plugin](#mason-nvim-dap-plugin)
@@ -36,30 +37,31 @@ nvim
         ├── config
         │   ├── keybinds.lua
         │   ├── lazy.lua
-        │   └── options.lua
+        │   ├── options.lua
+        │   └── autocmds.lua
         └── plugins
             ├── plugin.lua
             └── ...
 ```
 
 ### Loading order
-init.lua only import other files.  
-In order of import :
-
-1. options.lua - vim.opt options, same as vim set options.
-2. lazy.lua - lazy.nvim package manager configuration.
-3. keybinds.lua - Contains most keybinds, it's loaded last since it may require plugins loaded by Lazy.
+init.lua only import other files.
+In order of import:
+1. options.lua: vim.opt options, same as vim set options.
+2. autocmds.lua: Custom autocmds.
+3. lazy.lua: lazy.nvim package manager configuration.
+4. keybinds.lua: Contains most keybinds, it's loaded last since it may require plugins loaded by Lazy.
 
 ## Neovim configuration
 The general configuration of Neovim is located in the config directory.
 
 ### Keybinds
-Keybinds are set in the file `lua/config/keybinds.lua`,  
-The Neovim function `vim.key.map.set()` is used to setup keybinds.  
-It takes the following parameters :
+Keybinds are set in the file `lua/config/keybinds.lua`,
+The Neovim function `vim.key.map.set()` is used to setup keybinds.
+It takes the following parameters:
 
 ```lua
-vim.keymap.set({mode}, {lhs}, {rhs}, {opts}) 
+vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 -- {mode} -> mode in which the keybinds will be usable "n" for normal mode or "i" for insert mode for example.
 -- {lhs} is the keybind.
 -- {rhs} is the command to be executed.
@@ -95,11 +97,11 @@ Keybinds follow a certain logic when possible.
 - Finally more basic Vim function don't use `<leader>`, `<leader>` is used for plugin or LSP functions.
 
 ## Plugins configurations
-Plugins individual configurations are then in the plugins directory.  
+Plugins individual configurations are then in the plugins directory.
 All are individual, one for each plugin, except for lspconfig.lua that contains multiple configurations for plugins related to [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig).
 
 ### Plugin configuration template
-Adding plugins is straightforward in most cases however LSP related plugins have particularities.  
+Adding plugins is straightforward in most cases however LSP related plugins have particularities.
 This template follows the official [documentation](https://www.lazyvim.org/configuration) of lazy.nvim.
 
 ```lua
@@ -140,23 +142,23 @@ In this repository an effort to separate plugin configurations has been made for
 
 ### Plugin list
 Plugins used by this configuration of Neovim, some use dependencies that won't be listed here.
-- [alpha-nvim](https://github.com/goolord/alpha-nvim) : Neovim welcome page.
-- [catppucin](https://github.com/catppuccin/nvim) : Used theme.
-- [indent-backline](https://github.com/lukas-reineke/indent-blankline.nvim) : A line that displayed indents.
-- [lazy](https://lazy.folke.io/) : Plugin manager.
-- [lualine](https://github.com/nvim-lualine/lualine.nvim) : Makes easy to configure the statusline, and has features to configure the tabline and the titleline.
-- [mason](https://github.com/williamboman/mason.nvim) : Installs LSP, linters, DAP and formatters.
-- [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim) : Displays a file tree and has features to edit files.
-- [highlight-colors](https://github.com/brenoprata10/nvim-highlight-colors) : Displays colours of different formats of colours.
-- [lspconfig](https://github.com/neovim/nvim-lspconfig) : Presets of LSP servers. Used to configure LSPs in Neovim.
-- [telescope](https://github.com/nvim-telescope/telescope.nvim) : Simple and fast way to find different files, information and more.
-- [vimtex](https://github.com/lervag/vimtex) : LaTeX tools for Vim.
-- [which-key](https://github.com/folke/which-key.nvim) : Displays keybinds possibilities with descriptions as they are typed.
-- [glow](https://github.com/ellisonleao/glow.nvim) : Displays a preview of Markdown files using [Glow CLI utility](https://github.com/charmbracelet/glow).
-- [tree-sitter](https://github.com/tree-sitter/tree-sitter) : Code analysis and improved colouration.
-- [trouble](https://github.com/folke/trouble.nvim) : A more easily readable output of telescope functionalities.
-- [dap](https://github.com/mfussenegger/nvim-dap) : Neovim debugger adapter protocol Plugin.
-- [dap-ui](https://github.com/rcarriga/nvim-dap-ui) : A better UI for dap.
+- [alpha-nvim](https://github.com/goolord/alpha-nvim): Neovim welcome page.
+- [catppucin](https://github.com/catppuccin/nvim): Used theme.
+- [indent-backline](https://github.com/lukas-reineke/indent-blankline.nvim): A line that displayed indents.
+- [lazy](https://lazy.folke.io/): Plugin manager.
+- [lualine](https://github.com/nvim-lualine/lualine.nvim): Makes easy to configure the statusline, and has features to configure the tabline and the titleline.
+- [mason](https://github.com/williamboman/mason.nvim): Installs LSP, linters, DAP and formatters.
+- [neo-tree](https://github.com/nvim-neo-tree/neo-tree.nvim): Displays a file tree and has features to edit files.
+- [highlight-colors](https://github.com/brenoprata10/nvim-highlight-colors): Displays colours of different formats of colours.
+- [lspconfig](https://github.com/neovim/nvim-lspconfig): Presets of LSP servers. Used to configure LSPs in Neovim.
+- [telescope](https://github.com/nvim-telescope/telescope.nvim): Simple and fast way to find different files, information and more.
+- [vimtex](https://github.com/lervag/vimtex): LaTeX tools for Vim.
+- [which-key](https://github.com/folke/which-key.nvim): Displays keybinds possibilities with descriptions as they are typed.
+- [tree-sitter](https://github.com/tree-sitter/tree-sitter): Code analysis and improved colouration.
+- [trouble](https://github.com/folke/trouble.nvim): A more easily readable output of telescope functionalities.
+- [dap](https://github.com/mfussenegger/nvim-dap): Neovim debugger adapter protocol Plugin.
+- [dap-ui](https://github.com/rcarriga/nvim-dap-ui): A better UI for dap.
+- [render-markdown](https://github.com/MeanderingProgrammer/render-markdown.nvim): Better renderer for markdown.
 
 ### Themes
 Published themes like [tokyonight](https://github.com/folke/tokyonight.nvim) are plugins and can be configured in the same way as the previous template.
@@ -165,9 +167,9 @@ If the theme is to be the main theme loaded and setup at start then it has to in
 -- lua/plugins/example-theme.lua
 {
 	priority: 1000, -- To be loaded 1st by lazy.nvim
-	
+
 	***
-  	
+
 	config = function (_, opts)
     	require("catppuccin").setup(opts)
     	vim.cmd.colorscheme("catppuccin") -- Set the theme, can be anywhere in the configuration.
@@ -177,7 +179,7 @@ If the theme is to be the main theme loaded and setup at start then it has to in
 
 ### Vimtex
 Vimtex is the plugin that facilitates editing LaTeX (.tex) files. It provides a lot of extra tools and syntax help.
-One of these tools in a real time viewer that updates each time the LaTeX file is recompiled. In Linux distributions this preview is done with [zathura](https://pwmt.org/projects/zathura/) PDF viewer. 
+One of these tools in a real time viewer that updates each time the LaTeX file is recompiled. In Linux distributions this preview is done with [zathura](https://pwmt.org/projects/zathura/) PDF viewer.
 However, on macOS zathura can have compatibility problems, so an easier solution is to use [Skim](https://skim-app.sourceforge.io/) instead.
 
 To do so a simple change in Vimtex configuration must be done.
@@ -211,12 +213,61 @@ tabline = {
 },
 ```
 
+### render-markdown
+render-mardown features a better markdown renderer. It is also quite configurable.
+
+```lua
+opts = {
+    render_modes = true,
+    debounce = 200,
+    sign = {
+      enabled = false,
+    },
+    code = {
+      style = "full",
+      position = "left",
+      language_name = false,
+      width = "full",
+      left_pad = 5,
+      right_pad = 5
+    },
+    heading = {
+      width = "full",
+      icons = { "# ", "## ", "### ", "#### ", "##### ", "###### " },
+    },
+    paragraph = {
+      enabled = false
+    },
+    bullet = {
+      icons = { '●', '○', '◆', '◇' },
+      left_pad = 1,
+      right_pad = 1
+    },
+    link = {
+      enabled = true,
+      footnote = {
+        superscript = true,
+        prefix = "",
+        suffix = "",
+      },
+      image = "󰥶 ",
+      email = "󰀓 ",
+      hyperlink = "󰌹 ",
+      highlight = "RenderMarkdownLink",
+      wiki = { icon = "󱗖 ", highlight = "RenderMarkdownWikiLink" },
+      custom = {
+        web = { pattern = "^http", icon = "󰖟 " },
+      },
+    }
+  },
+```
+
 ### LSP and DAP configuration
 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) is builtin Neovim. It provides to [Neovim LSP Client](https://neovim.io/doc/user/lsp.html) (Language Server Protocol) presets for configurations of each [LSP Server](https://microsoft.github.io/language-server-protocol/).
 
 With nvim-lspconfig alone each LSP Server has to be installed by the user in the system. To simplify LSP server management the [mason](https://github.com/williamboman/mason.nvim) plugin is used. It install LSP Servers during its setup or by Neovim command line, both are persistent.
 
-Neovim LSP Client has also no automatic autocompletion only a keybinds to complete, by default with the keybind `<C-x> / <C-o>`.  
+Neovim LSP Client has also no automatic autocompletion only a keybinds to complete, by default with the keybind `<C-x> / <C-o>`.
 Another plugin [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) is therefore used to enable a [VSCodium](https://vscodium.com/) like autocompletion.
 
 These 3 configurations then have to be configured and loaded in a specific order.
@@ -313,8 +364,8 @@ local lsp_servers = {
 - **settings**: specific LSP servers options.
 - **(optional) on_init**: function to execute when a LSP server is initiated. Not always used that is why it is optional.
 
-mason also manages [linters](https://en.wikipedia.org/wiki/Lint_%28software%29 "https://en.wikipedia.org/wiki/Lint_(software)"), [DAPs](https://microsoft.github.io/debug-adapter-protocol/) (Debug Adapter Protocol) servers and code formatters.  
-In this example not all are LSPs , some are linters only, they do not provide any completion suggestions.  
+mason also manages [linters](https://en.wikipedia.org/wiki/Lint_%28software%29 "https://en.wikipedia.org/wiki/Lint_(software)"), [DAPs](https://microsoft.github.io/debug-adapter-protocol/) (Debug Adapter Protocol) servers and code formatters.
+In this example not all are LSPs , some are linters only, they do not provide any completion suggestions.
 For example for Javascript [quick-lint-js](https://quick-lint-js.com/) linter is used with [ts_ls](https://github.com/typescript-language-server/typescript-language-server) LSP.
 
 However, only LSPs will be covered in this section.
@@ -386,7 +437,7 @@ mason require these 2 plugins.
 These plugins must be loaded in this specific order.
 
 
-`dap_list` is a list of DAP with [specific names](https://github.com/jay-babu/mason-nvim-dap.nvim/blob/main/lua/mason-nvim-dap/mappings/source.lua) for mason-nvim-dap. 
+`dap_list` is a list of DAP with [specific names](https://github.com/jay-babu/mason-nvim-dap.nvim/blob/main/lua/mason-nvim-dap/mappings/source.lua) for mason-nvim-dap.
 
 ```lua
 ...
@@ -408,10 +459,10 @@ Then mason installed LSP servers must be connected to lspconfig.
 {
     "neovim/nvim-lspconfig",
     event = "VeryLazy",
-    -- nvim-lspconfig is dependent on cmp-nvim-lsp being loaded 
+    -- nvim-lspconfig is dependent on cmp-nvim-lsp being loaded
     -- to be able to be used by cmp plugins as a source completion.
     dependencies = {"hrsh7th/cmp-nvim-lsp"},
-    
+
     ...
 
     config = function()
@@ -431,7 +482,7 @@ Then mason installed LSP servers must be connected to lspconfig.
         end
       end
 
-      -- For each server the setup in run with the override of capabilities and settings properties if on_init exists it is also override. 
+      -- For each server the setup in run with the override of capabilities and settings properties if on_init exists it is also override.
       for _,s in pairs(lsp_servers) do
         if s.on_init ~= nil then
           lspconfig[s.name].setup({
@@ -451,7 +502,7 @@ Then mason installed LSP servers must be connected to lspconfig.
   },
 ```
 
-At this point Neovim LSP Client can use the LSP servers but not offer auto-completions.  
+At this point Neovim LSP Client can use the LSP servers but not offer auto-completions.
 So nvim-cmp still need to be setup.
 
 #### nvim-cmp plugin configuration
@@ -488,7 +539,7 @@ nvim-cmp has a number of properties that have to be set in its setup.
 -- lua/plugins/lspconfig.lua
 {
     ...
-    
+
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
@@ -515,9 +566,9 @@ nvim-cmp has a number of properties that have to be set in its setup.
             {name = "buffer"}
           }
         ),
-        
+
     ...
-    
+
   }
 
 ```
@@ -529,12 +580,14 @@ This tables is done with values obtained via lazy internal profiler.
 Nvim is started 10 times on this configuration to determine an average.
 The Macbook Pro is tested on battery.
 
-Macbook pro configuration :
-- CPU : i5@2,3 GHz (4 Cores)
-- GPU : Intel Iris Plus Graphics 655
-- RAM : 8 Gb LPDDR3 @2133MHz
-- OS : macOS Sequoia 15.2
+Macbook pro configuration:
+- CPU: i5@2,3 GHz (4 Cores)
+- GPU: Intel Iris Plus Graphics 655
+- RAM: 8 Gb LPDDR3 @2133MHz
+- OS: macOS Sequoia 15.2
 
 | PC | date | average startup time | best time | worst time |
-| :---: | :---: | :---: | :--: | :--: |
-| Macbook Pro i5 2018 | 20/12/2024 | | | | 
+| :---: |:---: | :---: | :--: | :--: |
+| Macbook Pro i5 2018 | 20/12/2024 | x | x | x |
+
+

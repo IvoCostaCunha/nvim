@@ -103,10 +103,15 @@ return {
   {
     "mfussenegger/nvim-dap",
     keys = {
-      { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Add breakpoint" }
+      { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Add breakpoint" },
+      { "<leader>dc", "<cmd>DapContinue<cr>", desc = "Continue" },
+      { "<leader>dn", "<cmd>DapStepInto<cr>", desc = "Next step" },
+      { "<leader>dp", "<cmd>DapStepOver<cr>", desc = "Previous step" },
+      { "<leader>di", "<cmd>DapToggleRepl<cr>", desc = "Inspect state" },
+      { "<leader>dr", "<cmd>DapRestartFrame<cr>", desc = "Restart frame" },
     },
   },
-  
+
   {
     "jay-babu/mason-nvim-dap.nvim",
     opts = {
@@ -114,7 +119,7 @@ return {
       handlers = {},
     }
   },
-  
+
   {
     "rcarriga/nvim-dap-ui",
     dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
@@ -134,7 +139,7 @@ return {
         dapui.close()
       end
 
-      require("nvim-dap-ui").setup()
+      require("dapui").setup()
     end,
     keys = {
       { "<leader>dt", "<cmd>lua require('dapui').toggle()<cr>", desc = "Toggle debug UI" }
@@ -144,7 +149,7 @@ return {
   -- nvim-lspconfig is a collection of lsp servers templates and is connected to mason by mason-lspconfig.
   {
     "neovim/nvim-lspconfig",
-    event = "VeryLazy",
+    event = "BufAdd",
     -- nvim-lspconfig is dependent on cmp-nvim-lsp being loaded to be able to be used by cmp plugins as source completion.
     dependencies = { "hrsh7th/cmp-nvim-lsp" },
 
@@ -251,7 +256,7 @@ return {
       "saadparwaiz1/cmp_luasnip"
     },
 
-    -- Load plugin only on entering insert mode.
+    -- Load plugin only when a buffer is created.
     event = "InsertEnter",
 
     config = function()
@@ -273,7 +278,8 @@ return {
             { name = "nvim_lsp" }, -- keyboard_lenght => To auto complete at x chars.
             { name = "path" },
             { name = "buffer" },
-            { name = "luasnip" }
+            { name = "luasnip" },
+            { name = 'render-markdown' },
           },
           {
             { name = "buffer" }

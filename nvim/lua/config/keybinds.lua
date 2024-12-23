@@ -14,6 +14,7 @@ wk.add {
   { "<leader>d",  group = "Debug" },
   { "<leader>x",  group = "Diagnostic list" },
   { "<leader>m",  group = "Markdown preview" },
+  { "<leader>w",  group = "Wiki" },
 }
 
 -- Keybinds
@@ -33,34 +34,24 @@ map.set("n", "<C-h>", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
 map.set("n", "<C-w>", "<cmd>tabclose<cr>", { desc = "Close current tab" })
 
 -- Telescope
-local telescope = require("telescope.builtin")
-map.set("n", "<leader>ff", telescope.find_files, { desc = "Find files" })
-map.set("n", "<leader>fg", telescope.live_grep, { desc = "Live grep" })
-map.set("n", "<leader>fb", telescope.buffers, { desc = "Buffers" })
-map.set("n", "<leader>fd", telescope.diagnostics, { desc = "Diagnostics" })
-map.set("n", "<leader>fo", telescope.oldfiles, { desc = "Old_files" })
-map.set("n", "<leader>fm", telescope.man_pages, { desc = "Man pages" })
-map.set("n", "<leader>ft", telescope.colorscheme, { desc = "Colorschemes" })
-map.set("n", "<leader>fp", telescope.search_history, { desc = "Search history" })
-map.set("n", "<leader>fh", telescope.help_tags, { desc = "Help tags" })
-map.set("n", "<leader>fd", telescope.lsp_definitions, { desc = "LSP definitions" })
-map.set("n", "<leader>fi", telescope.lsp_implementations, { desc = "LSP implementations" })
-map.set("n", "<leader>fs", telescope.lsp_document_symbols, { desc = "LSP symbols" })
-map.set("n", "<leader>fr", telescope.lsp_references, { desc = "LSP references" })
+map.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
+map.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Live grep" })
+map.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Buffers" })
+map.set("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", { desc = "Diagnostics" })
+map.set("n", "<leader>fo", "<cmd>Telescope oldfiles<cr>", { desc = "Old_files" })
+map.set("n", "<leader>fm", "<cmd>Telescope man_pages<cr>", { desc = "Man pages" })
+map.set("n", "<leader>ft", "<cmd>Telescope colorscheme<cr>", { desc = "Colorschemes" })
+map.set("n", "<leader>fp", "<cmd>Telescope search_history<cr>", { desc = "Search history" })
+map.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Help tags" })
+map.set("n", "<leader>fd", "<cmd>Telescope lsp_definitions<cr>", { desc = "LSP definitions" })
+map.set("n", "<leader>fi", "<cmd>Telescope lsp_implementations<cr>", { desc = "LSP implementations" })
+map.set("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "LSP symbols" })
+map.set("n", "<leader>fr", "<cmd>Telescope lsp_references<cr>", { desc = "LSP references" })
 
-map.set("n", "<leader>fGc", telescope.git_commits, { desc = "Git commit" })
-map.set("n", "<leader>fGb", telescope.git_branches, { desc = "Git branch" })
-map.set("n", "<leader>fGs", telescope.git_status, { desc = "Git status" })
+map.set("n", "<leader>fGc", "<cmd>Telescope git_commits<cr>", { desc = "Git commit" })
+map.set("n", "<leader>fGb", "<cmd>Telescope git_branches<cr>", { desc = "Git branch" })
+map.set("n", "<leader>fGs", "<cmd>Telescope git_status<cr>", { desc = "Git status" })
 
--- LateX (Vimtext)
-map.set("n", "<leader>lt", "<cmd>VimtexTocToggle<cr>", { desc = "LaTeX toggle" })
-map.set("n", "<leader>lc", "<cmd>VimtexCompile<cr>", { desc = "LaTeX compile" })
-map.set("n", "<leader>lr", "<cmd>VimtexReload<cr>", { desc = "LaTeX reload" })
-map.set("n", "<leader>ls", "<cmd>VimtexStop<cr>", { desc = "LaTeX stop" })
-map.set("n", "<leader>lw", "<cmd>VimtexClean<cr>", { desc = "LaTeX clean" })
-map.set("n", "<leader>lv", "<cmd>VimtexView<cr>", { desc = "LaTeX view" })
-map.set("n", "<leader>lx", "<cmd>VimtexErrors<cr>", { desc = "LaTeX errors" })
-map.set("n", "<leader>li", "<cmd>VimtexInfo<cr>", { desc = "LaTeX info" })
 
 -- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -68,28 +59,23 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map.set("n", "K", vim.lsp.buf.hover, { desc = "Cursor doc" })
     map.set("n", "R", vim.lsp.buf.rename, { desc = "Rename" })
     map.set("n", "F", vim.lsp.buf.format, { desc = "Format buffer" })
+    map.set("n", "E", vim.diagnostic.open_float, { desc = "Diagnostic open float" })
+    map.set("n", "En", vim.diagnostic.goto_next, { desc = "Diagnostic next" })
+    map.set("n", "EN", vim.diagnostic.goto_prev, { desc = "Diagnostic previous" })
 
-    map.set("n", "gD", vim.lsp.buf.definition, { desc = "Go to definition" })
-    map.set("n", "gd", vim.lsp.buf.declaration, { desc = "Go to declaration(s)" })
-    map.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
-    map.set("n", "gs", vim.lsp.buf.signature_help, { desc = "Signature help" })
-
-
-    map.set("n", "ef", vim.diagnostic.open_float, { desc = "Diagnostic open float" })
-    map.set("n", "el", vim.diagnostic.goto_next, { desc = "Diagnostic next" })
-    map.set("n", "eh", vim.diagnostic.goto_prev, { desc = "Diagnostic previous" })
+    map.set("n", "<leader>gD", vim.lsp.buf.definition, { desc = "Go to definition" })
+    map.set("n", "<leader>gd", vim.lsp.buf.declaration, { desc = "Go to declaration(s)" })
+    map.set("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
+    map.set("n", "<leader>gs", vim.lsp.buf.signature_help, { desc = "Signature help" })
   end
 })
 
--- DAP (Debug) -> In lua/plugins/dap.lua
--- map.set("n", "<leader>db", "<cmd>DapToggleBreakpoint<cr>", {desc = "Add breakpoint"}) -- set in plugin conf file
-map.set("n", "<leader>dc", "<cmd>DapContinue<cr>", { desc = "Continue" })
-map.set("n", "<leader>dn", "<cmd>DapStepInto<cr>", { desc = "Next step" })
-map.set("n", "<leader>dp", "<cmd>DapStepOver<cr>", { desc = "Previous step" })
-map.set("n", "<leader>di", "<cmd>DapToggleRepl<cr>", { desc = "Inspect state" })
-map.set("n", "<leader>dr", "<cmd>DapRestartFrame<cr>", { desc = "Restart" })
+-- Keybinds in plugin configurations
+-- lazy.vim allows to load plugins on input. So these keybinds must be set per plugin at least until I find a better solution.
 
--- lazy.vim allows to load plugins on input but if require(<plugin>) is used then the plugin is loaded before anyway. So these keybinds must be set per plugin at least until a better solution arises.
+-- DAP (Debug) -> In lua/plugins/dap.lua
+-- LateX (Vimtext) -> lua/plugins/vimtex.lua
 -- Trouble -> in lua/plugins/trouble.lua
 -- Cmp -> In lua/plugins/lspconfig.lua
 -- Markdown preview -> in lua/plugins/glow.lua
+-- Vimwiki -> in lua/plugins/vimwiki.lua

@@ -6,7 +6,7 @@ return {
     "MunifTanjim/nui.nvim",
   },
   keys = {
-    { "<tab>", ":Neotree toggle<cr>", desc = "NeoTree toogle" }
+    { "<tab>", "<cmd>Neotree toggle<cr>", desc = "NeoTree toogle" }
   },
   opts = {
     filesystem = {
