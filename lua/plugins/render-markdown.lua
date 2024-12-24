@@ -61,6 +61,7 @@ return {
         github = { pattern = "github%.com", icon = "󰊤 " },
         neovim = { pattern = "neovim%.io", icon = " " },
         gitlab = { pattern = "gitlab%.org", icon = " " },
+        gitlab_repos = { pattern = "gitlab%.com", icon = " " },
         wikipedia = { pattern = "wikipedia%.org", icon = " " },
         open_source_initiative = { pattern = "opensource%.org", icon = "󰮮 " },
         sci_hub = { pattern = "sci_hub%.st", icon = "󰨈 " },
