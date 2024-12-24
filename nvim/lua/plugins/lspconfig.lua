@@ -33,7 +33,7 @@ local lsp_servers = {
           version = "LuaJIT"
         }
       }
-    }
+  }
   },
   -- ltex only provides orthographic corrections.
   {
@@ -46,8 +46,8 @@ local lsp_servers = {
         },
         -- User dictionaries
         dictionary = {
-          ["en-GB"] = {},
-          ["fr"] = {}
+          ["en-GB"] = { "neovim", "Neovim", "nvim" },
+          ["fr"] = { "neovim", "Neovim", "nvim" }
         },
         checkFrequency = "edit",
         sentenceCacheSize = "2500",
@@ -66,11 +66,11 @@ local lsp_servers = {
   { name = "jdtls",         settings = {} },
 }
 
-local dap_list = { "python", "codelldb"}
+local dap_list = { "python", "codelldb" }
 
 -- Reducing to an array with only the names of LSP servers.
 local lsp_servers_to_install = {}
-for key, value in pairs(lsp_servers) do
+for _, value in pairs(lsp_servers) do
   table.insert(lsp_servers_to_install, value.name)
 end
 
@@ -104,11 +104,11 @@ return {
     "mfussenegger/nvim-dap",
     keys = {
       { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "Add breakpoint" },
-      { "<leader>dc", "<cmd>DapContinue<cr>", desc = "Continue" },
-      { "<leader>dn", "<cmd>DapStepInto<cr>", desc = "Next step" },
-      { "<leader>dp", "<cmd>DapStepOver<cr>", desc = "Previous step" },
-      { "<leader>di", "<cmd>DapToggleRepl<cr>", desc = "Inspect state" },
-      { "<leader>dr", "<cmd>DapRestartFrame<cr>", desc = "Restart frame" },
+      { "<leader>dc", "<cmd>DapContinue<cr>",         desc = "Continue" },
+      { "<leader>dn", "<cmd>DapStepInto<cr>",         desc = "Next step" },
+      { "<leader>dp", "<cmd>DapStepOver<cr>",         desc = "Previous step" },
+      { "<leader>di", "<cmd>DapToggleRepl<cr>",       desc = "Inspect state" },
+      { "<leader>dr", "<cmd>DapRestartFrame<cr>",     desc = "Restart frame" },
     },
   },
 
@@ -122,7 +122,7 @@ return {
 
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"},
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     config = function()
       local dap, dapui = require("dap"), require("dapui")
 
@@ -166,20 +166,20 @@ return {
       -- Floating LSP error/warn/info/hint tooltip config.
       vim.api.nvim_create_autocmd("CursorHold", {
         callback = function()
-          local opts = {
-            focusable = false,
-            -- severity = "Error", -- To limit which diagnostic types trigger the floating window.
-            close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-            -- source is the source of the error like diagnostics from lspconfig or other
-            source = "if_many",
-            -- prefix = "",
-            -- suffix = "",
-            scope = "line", -- scope is the scope from which the diagnostic is displayed.
-            severity_sort = true,
-            border = "single",
-          }
+          -- local opts = {
+          --   focusable = false,
+          --   -- severity = "Error", -- To limit which diagnostic types trigger the floating window.
+          --   close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+          --   -- source is the source of the error like diagnostics from lspconfig or other
+          --   source = "if_many",
+          --   -- prefix = "",
+          --   -- suffix = "",
+          --   scope = "line", -- scope is the scope from which the diagnostic is displayed.
+          --   severity_sort = true,
+          --   border = "single",
+          -- }
 
-          vim.diagnostic.open_float(opts)
+          -- vim.diagnostic.open_float(opts)
           -- The following code objective is to have a fixed floating window of diagnostic instead of one following the cursor.
           -- Get window number of diagnostic floating window.
           -- local _,window_id = vim.diagnostic.open_float(opts)
@@ -313,7 +313,7 @@ return {
           end
         },
 
-        -- Keybinds
+        -- Mappings
         mapping = cmp.mapping.preset.insert({
           ["<C-k>"] = cmp.mapping.scroll_docs(-4),
           ["<C-j>"] = cmp.mapping.scroll_docs(4),

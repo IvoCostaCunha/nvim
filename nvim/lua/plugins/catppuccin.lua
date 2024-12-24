@@ -2,6 +2,7 @@ return {
   "catppuccin/nvim",
   name = "catppuccin",
   priority = 1000,
+
   opts = {
     flavour = "frappe",
     no_italic = false,
@@ -22,6 +23,7 @@ return {
       operators = {},
     },
   },
+
   config = function(_, opts)
     require("catppuccin").setup(opts)
     vim.cmd.colorscheme("catppuccin")

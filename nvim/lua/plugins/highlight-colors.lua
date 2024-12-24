@@ -1,6 +1,7 @@
 return {
   "brenoprata10/nvim-highlight-colors",
   event = "VeryLazy",
+
   opts = {
     -- render can be "background", "foreground", or "virtual".
     render = "background",

@@ -5,9 +5,11 @@ return {
     "nvim-tree/nvim-web-devicons",
     "MunifTanjim/nui.nvim",
   },
+
   keys = {
     { "<tab>", "<cmd>Neotree toggle<cr>", desc = "NeoTree toogle" }
   },
+
   opts = {
     filesystem = {
       filtered_items = {

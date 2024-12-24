@@ -1,8 +1,6 @@
 return {
   "goolord/alpha-nvim",
-
   dependencies = { "nvim-tree/nvim-web-devicons" },
-
   event = "VimEnter",
 
   config = function()
@@ -21,7 +19,7 @@ return {
     sf.section.top_buttons.val = {
       sf.button("e", "New file", "<cmd>ene <bar> startinsert<cr>"),
       sf.button("f", "Open Telescope (files)", "<cmd>Telescope find_files<cr>"),
-      sf.button("k", "Keybinds", "<cmd>e ~/.config/nvim/lua/config/keybinds.lua<cr>"),
+      sf.button("k", "Keybinds", "<cmd>e ~/.config/nvim/lua/config/mappings.lua<cr>"),
       sf.button("o", "Options", "<cmd>e ~/.config/nvim/lua/config/options.lua<cr>"),
       sf.button("p", "Plugin Manager (Lazy)", "<cmd>Lazy<cr>"),
       sf.button("l", "LSP Manager (Mason)", "<cmd>Mason<cr>"),

@@ -5,6 +5,7 @@ return {
   ---@type ibl.config
 
   event = "VeryLazy",
+
   opts = {
     enabled = true,
     indent = { char = "╎" },
@@ -17,7 +18,7 @@ return {
       show_exact_scope = true
     },
     exclude = {
-      filetypes = { "c", "cpp", "cs", "java" }
+      filetypes = {}
     }
   },
 }

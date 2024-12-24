@@ -5,9 +5,11 @@ return {
     { "nvim-tree/nvim-web-devicons" }
   },
   event = "VeryLazy",
+
   opts = {
     preset = "helix",
   },
+
   keys = {
     {
       "<leader>?",

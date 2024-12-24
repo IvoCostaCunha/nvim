@@ -1,7 +1,9 @@
 -- <leader> key is set in config/options.lua
 -- <cmd> equals to ":"
 
--- The following keybinds set by whick-key are only used to show a general description in which-key plugin popup keybinds "groups".
+-- lazy.vim allows to load plugins on input. So these mappings must be set per plugin at least until I find a better solution. So missing mappings will be on each plugin Lua configuraton file.
+
+-- The following mappings set by whick-key are only used to show a general description in which-key plugin popup mappings "groups".
 -- Example "<leader>g" shows GoTo as description, before showing "Go to definition" when "<leader>gD" (go to definition) is pressed.
 local wk = require("which-key")
 wk.add {
@@ -37,7 +39,7 @@ map.set("n", "<C-w>", "<cmd>tabclose<cr>", { desc = "Close current tab" })
 map.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
 map.set("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", { desc = "Live grep" })
 map.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Buffers" })
-map.set("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", { desc = "Diagnostics" })
+map.set("n", "<leader>fe", "<cmd>Telescope diagnostics<cr>", { desc = "Diagnostics" })
 map.set("n", "<leader>fo", "<cmd>Telescope oldfiles<cr>", { desc = "Old_files" })
 map.set("n", "<leader>fm", "<cmd>Telescope man_pages<cr>", { desc = "Man pages" })
 map.set("n", "<leader>ft", "<cmd>Telescope colorscheme<cr>", { desc = "Colorschemes" })
@@ -52,6 +54,8 @@ map.set("n", "<leader>fGc", "<cmd>Telescope git_commits<cr>", { desc = "Git comm
 map.set("n", "<leader>fGb", "<cmd>Telescope git_branches<cr>", { desc = "Git branch" })
 map.set("n", "<leader>fGs", "<cmd>Telescope git_status<cr>", { desc = "Git status" })
 
+-- Render-markdown
+map.set("n", "<leader>mt", "<cmd>RenderMarkdown toggle<cr>", { desc = "Render Markdown toggle" })
 
 -- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -69,13 +73,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map.set("n", "<leader>gs", vim.lsp.buf.signature_help, { desc = "Signature help" })
   end
 })
-
--- Keybinds in plugin configurations
--- lazy.vim allows to load plugins on input. So these keybinds must be set per plugin at least until I find a better solution.
-
--- DAP (Debug) -> In lua/plugins/dap.lua
--- LateX (Vimtext) -> lua/plugins/vimtex.lua
--- Trouble -> in lua/plugins/trouble.lua
--- Cmp -> In lua/plugins/lspconfig.lua
--- Markdown preview -> in lua/plugins/glow.lua
--- Vimwiki -> in lua/plugins/vimwiki.lua
