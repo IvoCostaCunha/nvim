@@ -2,7 +2,7 @@ return {
   "lervag/wiki.vim",
 
   init = function()
-    vim.g.wiki_root = "~/wiki-notes"
+    vim.g.wiki_root = "~/wiki"
   end,
 
   keys = {
