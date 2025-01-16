@@ -7,6 +7,7 @@ return {
 
   opts = {
     -- Any element in this array will be installed if not already.
+    -- LaTeX syntax is already managed by vimtex !
     ensure_installed = {
       "vim", "vimdoc",                           -- vim
       "c", "cpp", "make", "cmake",               -- C/C++
@@ -17,7 +18,7 @@ return {
       "python",
       "bash",
       "json", "toml", "yaml",        -- Config files
-      "latex",
+
       "markdown", "markdown_inline", -- Markdown
     },
     -- Depends on tree-sitter CLI installed locally.

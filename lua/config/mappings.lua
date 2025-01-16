@@ -57,6 +57,16 @@ map.set("n", "<leader>fGs", "<cmd>Telescope git_status<cr>", { desc = "Git statu
 -- Render-markdown
 map.set("n", "<leader>mt", "<cmd>RenderMarkdown toggle<cr>", { desc = "Render Markdown toggle" })
 
+-- Vimtex
+map.set("n", "<leader>lt", "<cmd>VimtexTocToggle<cr>", { desc = "LaTeX toggle" })
+map.set("n", "<leader>lc", "<cmd>VimtexCompile<cr>", { desc = "LaTeX compile" })
+map.set("n", "<leader>lr", "<cmd>VimtexReload<cr>", { desc = "LaTeX reload" })
+map.set("n", "<leader>ls", "<cmd>VimtexStop<cr>", { desc = "LaTeX stop" })
+map.set("n", "<leader>lw", "<cmd>VimtexClean<cr>", { desc = "LaTeX clean" })
+map.set("n", "<leader>lv", "<cmd>VimtexView<cr>", { desc = "LaTeX view" })
+map.set("n", "<leader>lx", "<cmd>VimtexErrors<cr>", { desc = "LaTeX errors" })
+map.set("n", "<leader>li", "<cmd>VimtexInfo<cr>", { desc = "LaTeX info" })
+
 -- LSP
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function()

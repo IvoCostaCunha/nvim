@@ -1,6 +1,6 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown", "latex" },
+  ft = "markdown",
   dependencies = {
     { "nvim-tree/nvim-web-devicons",    opt = true },
     { "nvim-treesitter/nvim-treesitter" }

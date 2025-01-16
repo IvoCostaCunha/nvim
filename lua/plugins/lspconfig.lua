@@ -36,24 +36,24 @@ local lsp_servers = {
   }
   },
   -- ltex only provides orthographic corrections.
-  {
-    name = "ltex",
-    settings = {
-      ltex = {
-        language = "EN-GB",
-        disabledRules = {
-          ["en-GB"] = { "PROFANITY" }
-        },
-        -- User dictionaries
-        dictionary = {
-          ["en-GB"] = { "neovim", "Neovim", "nvim" },
-          ["fr"] = { "neovim", "Neovim", "nvim" }
-        },
-        checkFrequency = "edit",
-        sentenceCacheSize = "2500",
-      }
-    }
-  },
+  -- {
+  --   name = "ltex",
+  --   settings = {
+  --     ltex = {
+  --       language = "EN-GB",
+  --       disabledRules = {
+  --         ["en-GB"] = { "PROFANITY" }
+  --       },
+  --       -- User dictionaries
+  --       dictionary = {
+  --         ["en-GB"] = { "neovim", "Neovim", "nvim" },
+  --         ["fr"] = { "neovim", "Neovim", "nvim" }
+  --       },
+  --       checkFrequency = "edit",
+  --       sentenceCacheSize = "2500",
+  --     }
+  --   }
+  -- },
   { name = "bashls",        settings = {} },
   { name = "dockerls",      settings = {} },
   { name = "texlab",        settings = {} },

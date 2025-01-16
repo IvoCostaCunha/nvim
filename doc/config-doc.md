@@ -4,7 +4,7 @@
 ## Table of contents
 1. [General](#General)
     1. [Directory structure](#directory-structure)
-    2. [Lua modules loading order](#lua-modules-loading-order)
+    2. [Loading order](#loading-order)
 2. [Neovim configuration](#neovim-configuration)
     1. [Mappings](#mappings)
         1. [Mapping set up function](#mapping-setup-function)
@@ -14,20 +14,20 @@
     1. [Plugin configuration template](#plugin-configuration-template)
     2. [Plugin list](#plugin-list)
     3. [Themes](#themes)
-    4. [Core plugins](#core-plugins)
-        1. [Lualine](#lualine)
-        2. [Treesitter](#treesitter)
-        3. [LSP and DAP configuration](#lsp-and-dap-configuration)
+    4. [Core](#core)
+        1. [Treesitter](#treesitter)
+        3. [LSP and DAP](#lsp-and-dap)
             1. [List of LSP servers](#list-of-lsp-servers)
-            2. [mason plugin configuration](#mason-plugin-configuration)
-            3. [mason-nvim-dap plugin](#mason-nvim-dap-plugin)
-            4. [lspconfig configuration](#lspconfig-configuration)
-            5. [nvim-cmp plugin configuration](#nvim-cmp-plugin-configuration)
-    5. [Markdown and personal wiki plugins](#markdown-and-personal-wiki-plugins)
-        1. [Render-markdown](#render-markdown)
-        2. [Wiki](#wiki)
-    6. [LaTeX related plugins]
-        1. [Vimtex](#vimtex)
+            2. [mason](#mason)
+            3. [mason-nvim-dap](#mason-nvim-dap)
+            4. [lspconfig](#lspconfig)
+            5. [nvim-cmp](#nvim-cmp)
+    5. [UI](#ui)
+        1. [lualine](#lualine)
+        2. [render-markdown](#render-markdown)
+    5. [Others](#others)
+        1. [wiki](#wiki)
+        2. [vimtex](#vimtex)
 
 ## General
 ### Directory structure
@@ -42,6 +42,7 @@ nvim
     ├── lazyvim.json
     └── lua
         ├── config
+        │   ├── filetypes.lua
         │   ├── mappings.lua
         │   ├── lazy.lua
         │   ├── options.lua
@@ -56,8 +57,9 @@ init.lua uniquely imports other files.
 In order of import:
 1. options.lua: [vim.opt](https://neovim.io/doc/user/lua-guide.html#_vim.opt) options, same as vim set options.
 2. autocmds.lua: Custom [autocmds](https://neovim.io/doc/user/api.html#nvim_create_autocmd).
-3. lazy.lua: [lazy.nvim](https://lazy.folke.io/) package manager configuration.
-4. mappings.lua: Contains most mappings, it's loaded last since it may require plugins loaded by lazy.
+3. filetypes.lua: Additional filetypes.
+4. lazy.lua: [lazy.nvim](https://lazy.folke.io/) package manager configuration.
+5. mappings.lua: Contains most mappings, it's loaded last since it may require plugins loaded by lazy.
 
 ## Neovim configuration
 The general configuration of Neovim is located in `lua/config`.
@@ -207,7 +209,7 @@ If the theme is to be the main theme loaded and set up at start then it has to i
 }
 ```
 
-### Core plugins
+### Core
 #### Treesitter
 [treesitter](https://github.com/nvim-treesitter/nvim-treesitter) is a plugin that improves syntax and code logic recognition greatly. It also permits to use classic Vim mappings like `daf` (delete a function), `dac` (delete a class), `yib` (yank inner-block), or `vil` (select inner block) to be able to be used on objects.
 It comes with a good out of the box settings, but these settings can be improved.
@@ -215,6 +217,7 @@ It comes with a good out of the box settings, but these settings can be improved
 ```lua
   opts = {
     -- Any element in this array will be installed if not already.
+    -- LaTeX syntax is already managed by vimtex !
     ensure_installed = {
       "vim", "vimdoc", -- vim
       "c", "cpp", "make", "cmake", -- C/C++
@@ -225,7 +228,7 @@ It comes with a good out of the box settings, but these settings can be improved
       "python",
       "bash",
       "json", "toml", "yaml", -- Config files
-      "latex",
+
       "markdown", "markdown_inline", -- Markdown
     },
     -- Depends on tree-sitter CLI installed locally.
@@ -238,7 +241,7 @@ It comes with a good out of the box settings, but these settings can be improved
 -- ...
 ```
 
-#### LSP and DAP configuration
+#### LSP and DAP
 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) is built-in Neovim. It provides to [Neovim LSP Client](https://neovim.io/doc/user/lsp.html) (Language Server Protocol) presets for configurations of each [LSP Server](https://microsoft.github.io/language-server-protocol/).
 
 With nvim-lspconfig alone each LSP Server has to be installed by the user in the system. To simplify LSP server management the [mason](https://github.com/williamboman/mason.nvim) plugin is used. It installs LSP Servers during its set up or by Neovim command line, both are persistent.
@@ -346,7 +349,7 @@ However, only LSPs will be covered in this section.
 
 *Ideally each server should have its options set here, but I've not done it yet.*
 
-##### mason plugin configuration
+##### mason
 This list will then be installed by mason.
 
 ```lua
@@ -418,7 +421,7 @@ local dap_list = { "python", "codelldb"}
 ##### dap-ui
 dap-ui is a plugin that displays a better UI for nvim-dap
 
-##### lspconfig configuration
+##### lspconfig
 Then mason installed LSP servers must be connected to lspconfig.
 
 ```lua
@@ -470,7 +473,7 @@ Then mason installed LSP servers must be connected to lspconfig.
 At this point Neovim LSP Client can use the LSP servers but not offer auto-completions.
 So nvim-cmp still need to be set up.
 
-##### nvim-cmp plugin configuration
+##### nvim-cmp
 nvim-cmp is dependent on a number of "sub" plugins.
 
 ```lua
@@ -537,7 +540,7 @@ nvim-cmp has a number of properties that have to be set in its set up.
 
 At this point autocompletion should be enabled.
 
-### UI plugins
+### UI
 #### Lualine
 [lualine](https://github.com/nvim-lualine/lualine.nvim) provides an easier way to configure the statusline.
 It also features a way to configure the tabline and the titleline.
@@ -625,7 +628,7 @@ opts = {
 -- ...
 ```
 
-### Personal wiki related plugins
+### Others
 #### Wiki
 [Wiki](https://github.com/lervag/wiki.vim) features a way to use backlinks inside Neovim and provides useful commands to navigate and create notes. Backlinks are links between note files that together form a network.
 Unlike [vimwiki](https://github.com/vimwiki/vimwiki), wiki is only focused on the wiki aspect of note-taking, leaving UI functions to the user.
@@ -635,7 +638,7 @@ This plugin is mostly just mappings configurations to only load the plugin when 
 return {
   "lervag/wiki.vim",
   init = function()
-    vim.g.wiki_root = "~/wiki-notes"
+    vim.g.wiki_root = "~/wiki"
   end,
   keys = {
     {"<leader>ww", "<cmd>WikiIndex<cr>", desc = "Index"},
@@ -645,7 +648,6 @@ return {
 }
 ```
 
-### LaTeX related plugins
 #### Vimtex
 [Vimtex](https://github.com/lervag/vimtex) facilitates editing LaTeX (.tex) files. It provides a lot of extra tools and syntax help.
 One of these tools in a real time viewer that updates each time the LaTeX file is recompiled. In Linux distributions this preview is done with [zathura](https://pwmt.org/projects/zathura/) PDF viewer.
@@ -657,7 +659,7 @@ To do so a simple change in Vimtex configuration must be done.
 -- lua/plugins/vimtex.lua
 return {
   "lervag/vimtex",
-  event = "VeryLazy",
+  ft = {{"tex"}, {"lytex"}}
   init = function()
     -- VimTeX configuration goes here, e.g.
     -- Replace zathura by skim here !
