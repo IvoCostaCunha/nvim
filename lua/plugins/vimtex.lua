@@ -1,7 +1,7 @@
 return {
   "lervag/vimtex",
-  -- Only loads when entering a .tex file.
-  ft = { { "tex" }, { "lytex" } },
+  -- Only loads when entering a .tex or .lytex file.
+  ft = { "tex", "lytex" },
 
   init = function()
     -- VimTeX configuration goes here, e.g.
