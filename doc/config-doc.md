@@ -83,6 +83,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 #### Mappings logic
 Mappings follow a certain logic when possible.
 - Mappings that focus something use Vim default bindings for movement. For example moving between buffers use `Alt` and `h` or `l` to move to previous or next buffer.
+- Mappings that move between tabs use Alt+Shift and Vim default bindings for movement.
 - Mappings that delete something use `w`. For example `Alt+w` deletes a buffer.
 - Mappings that start a function or an action start by the first letter of that action. For example `<leader>lc` start LaTeX compiler. (l(atex)c(ompile))
 - Finally more basic Vim function don't use `<leader>`, `<leader>` is used for plugin or LSP functions.
@@ -168,7 +169,8 @@ This is the list of all installed plugins without their dependencies by theme.
 - Welcome page:
     - [alpha-nvim](https://github.com/goolord/alpha-nvim): Neovim welcome page.
 - Theme(s):
-    - [catppucin](https://github.com/catppuccin/nvim): Used main theme.
+- [vague](https://github.com/vague2k/vague.nvim): Used main theme.
+    - [catppucin](https://github.com/catppuccin/nvim): Alternative theme, more colorfull.
 - UI:
     - [which-key](https://github.com/folke/which-key.nvim): Displays mappings possibilities with descriptions as they are typed.
     - [lualine](https://github.com/nvim-lualine/lualine.nvim): Easy way to configure the statusline, and has features to configure the tabline and the titleline.
