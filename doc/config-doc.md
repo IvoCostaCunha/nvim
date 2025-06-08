@@ -84,7 +84,7 @@ vim.keymap.set({mode}, {lhs}, {rhs}, {opts})
 Mappings follow a certain logic when possible.
 - Mappings that focus something use Vim default bindings for movement. For example moving between buffers use `Alt` and `h` or `l` to move to previous or next buffer.
 - Mappings that move between tabs use Alt+Shift and Vim default bindings for movement.
-- Mappings that delete something use `w`. For example `Alt+w` deletes a buffer.
+- Mappings that delete something use `q`. For example `Alt+q` deletes a buffer.
 - Mappings that start a function or an action start by the first letter of that action. For example `<leader>lc` start LaTeX compiler. (l(atex)c(ompile))
 - Finally more basic Vim function don't use `<leader>`, `<leader>` is used for plugin or LSP functions.
 

@@ -27,13 +27,13 @@ map.set("n", "<A-n>", "<cmd>new<cr>", { desc = "New buffer (new window)" })
 map.set("n", "<A-a>", "<cmd>enew<cr>", { desc = "New buffer" })
 map.set("n", "<A-l>", "<cmd>bn<cr>", { desc = "Next buffer" })
 map.set("n", "<A-h>", "<cmd>bp<cr>", { desc = "Previous buffer" })
-map.set("n", "<A-w>", "<cmd>bd<cr>", { desc = "Delete current buffer" })
+map.set("n", "<A-q>", "<cmd>bd<cr>", { desc = "Delete current buffer" })
 
 -- Tabs
 map.set("n", "<A-S-n>", "<cmd>tabnew<cr>", { desc = "Add new tab" })
 map.set("n", "<A-S-l>", "<cmd>tabnext<cr>", { desc = "Next tab" })
 map.set("n", "<A-S-h>", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
-map.set("n", "<A-S-w>", "<cmd>tabclose<cr>", { desc = "Close current tab" })
+map.set("n", "<A-S-q>", "<cmd>tabclose<cr>", { desc = "Close current tab" })
 
 -- Telescope
 map.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find files" })
